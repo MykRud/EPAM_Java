@@ -12,9 +12,7 @@ public class FourthTask {
     private static double SumGeometricElements(int a1, double t, int alim) {
         double an = a1;
         int res = 0;
-        while(true){
-            if(an < alim)
-                break;
+        while (!(an < alim)) {
             res += an;
             an = an * t;
         }
