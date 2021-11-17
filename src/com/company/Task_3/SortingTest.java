@@ -12,12 +12,12 @@ class SortingTest {
 
     @BeforeClass
     public static void beforeClass() {
-        System.out.println("Before CalculatorTest.class");
+        System.out.println("Before Test");
     }
 
     @AfterClass
     public  static void afterClass() {
-        System.out.println("After CalculatorTest.class");
+        System.out.println("After Test");
     }
 
     @Test
