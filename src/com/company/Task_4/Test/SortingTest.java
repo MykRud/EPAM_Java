@@ -1,5 +1,7 @@
-package com.company.Task_3;
+package com.company.Task_4.Test;
 
+import com.company.Task_3.SortOrder;
+import com.company.Task_3.Sorting;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,8 +34,7 @@ class SortingTest {
 
     @Test(expected = IOException.class)
     public void isSorted() throws IOException {
-        Sorting.IsSorted(new int[]{3, 2, 6, 7}, SortOrder.Ascending);
-        Sorting.IsSorted(new int[]{3, 2, 6, 7}, SortOrder.Descending);
+        assertFalse(Sorting.IsSorted(new int[]{2, 7, 9, 1}, SortOrder.Ascending));
+        assertFalse(Sorting.IsSorted(new int[]{2, 7, 9, 1}, SortOrder.Descending));
     }
-
 }
