@@ -16,7 +16,6 @@ public class SalesPerson extends Employee{
             bonus = bonus.multiply(BigDecimal.valueOf(2));
         else if(percent.compareTo(BigDecimal.valueOf(199)) == 1)
             bonus = bonus.multiply(BigDecimal.valueOf(3));
-        this.bonus = bonus;
+        setBasicBonus(bonus);
     }
-
 }

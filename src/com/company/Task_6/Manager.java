@@ -15,7 +15,7 @@ public class Manager extends Employee{
             bonus = bonus.add(BigDecimal.valueOf(500));
         else if(quantity > 150)
             bonus = bonus.add(BigDecimal.valueOf(1000));
-        this.bonus = bonus;
+        setBasicBonus(bonus);
     }
 
 }
