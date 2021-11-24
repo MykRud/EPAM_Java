@@ -27,16 +27,16 @@ class ManagerTest {
         // 1
         manager = new Manager("Mike", BigDecimal.valueOf(5000), 200);
         manager.setBonus(BigDecimal.valueOf(1000));
-        assertEquals(BigDecimal.valueOf(2000), manager.getBonus());
+        assertEquals(0, BigDecimal.valueOf(2000).compareTo(manager.getBonus()));
 
         // 2
         manager = new Manager("Mike", BigDecimal.valueOf(5000), 130);
         manager.setBonus(BigDecimal.valueOf(1000));
-        assertEquals(BigDecimal.valueOf(1500), manager.getBonus());
+        assertEquals(0, BigDecimal.valueOf(1500).compareTo(manager.getBonus()));
 
         // 3
         manager = new Manager("Mike", BigDecimal.valueOf(5000), 90);
         manager.setBonus(BigDecimal.valueOf(1000));
-        assertEquals(BigDecimal.valueOf(1000), manager.getBonus());
+        assertEquals(0, BigDecimal.valueOf(1000).compareTo(manager.getBonus()));
     }
 }

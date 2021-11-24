@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeTest {
 
-    private static Employee emp;
+    private static Employee emp = new Employee("Mike", BigDecimal.valueOf(5000)) {
+        @Override
+        public void setBonus(BigDecimal bonus) {
+        }
+    };
 
     @org.junit.BeforeClass
     public static void beforeClass() {
         System.out.println("Before EmployeeTest.class");
-        emp = new Employee("Mike", BigDecimal.valueOf(5000)) {
-            @Override
-            public void setBonus(BigDecimal bonus) {
-            }
-        };
+
     }
 
     @org.junit.AfterClass
@@ -34,28 +34,29 @@ class EmployeeTest {
     }
 
     @Test
-    void getSalary() {
-        assertEquals(BigDecimal.valueOf(5000), emp.getSalary());
-    }
-
-
-    @Test
     void setSalary() {
         emp.setSalary(BigDecimal.valueOf(1000));
         assertEquals(0, emp.getSalary().compareTo(BigDecimal.valueOf(1000)));
     }
 
     @Test
+    void getSalary() {
+        emp.setSalary(BigDecimal.valueOf(10000));
+        assertEquals(0, BigDecimal.valueOf(10000).compareTo(emp.getSalary()));
+    }
+
+    @Test
     void getBonus() {
         SalesPerson sp = new SalesPerson("Mike", BigDecimal.valueOf(5000), BigDecimal.valueOf(200));
         sp.setBonus(BigDecimal.valueOf(1000));
-        assertEquals(BigDecimal.valueOf(3000), emp.getBonus());
+        assertEquals(0, BigDecimal.valueOf(3000).compareTo(sp.getBonus()));
     }
 
     @Test
     void toPay() {
         SalesPerson sp = new SalesPerson("Mike", BigDecimal.valueOf(5000), BigDecimal.valueOf(200));
         sp.setBonus(BigDecimal.valueOf(1000));
-        assertEquals(8000, emp.getSalary().add(sp.getBonus()));
+        assertEquals(0, BigDecimal.valueOf(8000).compareTo(emp.getSalary().add(sp.getBonus())));
+
     }
 }

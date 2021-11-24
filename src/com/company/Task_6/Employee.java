@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public abstract class Employee {
 
     private final String lastName;
-    private BigDecimal salary = new BigDecimal("");
-    protected BigDecimal bonus = new BigDecimal("");
+    private BigDecimal salary = new BigDecimal("0");
+    protected BigDecimal bonus = new BigDecimal("0");
 
     public String getLastName() {
         return lastName;

@@ -9,13 +9,17 @@ public class Company {
         this.employees = employees;
     }
 
+    public Employee[] getArray() {
+        return employees;
+    }
+
     public void giveEverbodyBonus(BigDecimal companyBonus){
         for(Employee emp : employees)
             emp.setBonus(companyBonus);
     }
 
     public BigDecimal totalToPay(){
-        BigDecimal sum = new BigDecimal("");
+        BigDecimal sum = new BigDecimal("0");
         for(Employee emp : employees) {
             sum = sum.add(emp.getSalary()).add(emp.getBonus());
         }
@@ -23,14 +27,18 @@ public class Company {
     }
 
     public String nameMaxSalary(){
-        BigDecimal maxSum = new BigDecimal("").add(employees[0].getSalary()).add(employees[0].getBonus());
-        BigDecimal sum = new BigDecimal("");
+        BigDecimal maxSum = new BigDecimal("0").add(employees[0].getSalary()).add(employees[0].getBonus());
+        BigDecimal sum = new BigDecimal("0");
         String name = employees[0].getLastName();
-        for(int i = 0; i < employees.length - 1; i++){
+        int a = 0;
+        for(int i = 1; i < employees.length; i++){
             sum = sum.add(employees[i].getSalary()).add(employees[i].getBonus());
-            if(maxSum.compareTo(sum) == -1)
+            if(maxSum.compareTo(sum) == -1) {
                 maxSum = sum;
+                a++;
+            }
         }
+        name = employees[a].getLastName();
         return name;
     }
 }
