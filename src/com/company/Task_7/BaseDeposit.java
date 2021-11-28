@@ -1,33 +1,26 @@
 package com.company.Task_7;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public class BaseDeposit extends Deposit{
+public class BaseDeposit extends Deposit {
+
     public BaseDeposit(BigDecimal amount, int period) {
         super(amount, period);
-        calculateAmountOfEachMonth();
-        calculateIncomeOfEachMonth();
-        
     }
 
-    private void calculateIncomeOfEachMonth() {
-        for (int i = 0; i < Period(); i++) {
-            incomeOfEachMonth[i] = amountOfEachMonth[i].subtract(Amount());
-        }
-    }
-
-    private void calculateAmountOfEachMonth() {
-        amountOfEachMonth[0] = BigDecimal.valueOf(0);
-        for(int i = 1; i < Period()+1; i++){
-            amountOfEachMonth[i-1] = Amount().multiply(BigDecimal.valueOf(pow(i)));
+    public void calculateAmountOfEachMonth() {
+        getAmountOfEachMonth()[0] = BigDecimal.valueOf(0);
+        for (int i = 1; i < Period() + 1; i++) {
+            getAmountOfEachMonth()[i - 1] = Amount().multiply(BigDecimal.valueOf(pow(i)));
         }
     }
 
     public BigDecimal income(int month) {
-        return incomeOfEachMonth[month-1];
+        return getIncomeOfEachMonth()[month - 1].setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    private double pow(int count) {
+    protected double pow(int count) {
         double res = 1;
         for (int i = 0; i < count; i++) {
             res *= 1 + 0.05;
