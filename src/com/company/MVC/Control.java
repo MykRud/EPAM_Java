@@ -97,8 +97,12 @@ public class Control{
         model = new Model();
     }
 
-    public Player getPlayer(){
+    public Player getCurrentPlayer(){
         return player;
+    }
+
+    public Player[] getPlayers(){
+        return players;
     }
 
     public void setExamplePlayer(){
@@ -111,11 +115,13 @@ public class Control{
 
     public void viewStatisticOfPlayer(Player player){
         calculateStatistic();
-            view.printStatisticOfPlayer(player.getName(), player.getShoots());
+        view.printStatisticOfPlayer(player.getName(), player.getShoots());
     }
     public void viewStatisticTable(){
+
         view.printStatisticTable(players, numberOfPlayers);
     }
+
     public void viewNumberOfAttempts(Player player){
         view.printNumberOfAttempts(player.getName(), model.getNumberOfAttempts());
     }

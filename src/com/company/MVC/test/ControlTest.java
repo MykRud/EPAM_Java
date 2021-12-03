@@ -5,8 +5,6 @@ import com.company.MVC.Diapason;
 import com.company.MVC.Player;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class ControlTest {
@@ -15,6 +13,8 @@ public class ControlTest {
 
     @Test
     public void checkForDiapasonBoolean() {
+        control.setModel();
+        control.setExamplePlayer();
         control.getModel().setRandomNumber(76);
         assertFalse(control.checkForDiapason(50));
         assertFalse(control.checkForDiapason(80));
@@ -23,6 +23,7 @@ public class ControlTest {
 
     @Test
     public void checkForDiapason() {
+        control.setModel();
         control.getModel().setRandomNumber(76);
         control.checkForDiapason(50);
         assertEquals(50, control.getModel().getDiapason(Diapason.FIRST));
@@ -52,18 +53,16 @@ public class ControlTest {
 
     @Test
     public void calculateStatistic(){
-        Player David = new Player("David");
         control.setExamplePlayer();
-        control.register(David);
         control.setModel();
         control.getModel().setRandomNumber(76);
         control.checkForDiapason(50);
         control.checkForDiapason(60);
         control.checkForDiapason(76);
         int[] arr = new int[3];
-        arr[0] = control.getPlayer().getShoots()[0];
-        arr[1] = control.getPlayer().getShoots()[1];
-        arr[2] = control.getPlayer().getShoots()[2];
+        arr[0] = control.getCurrentPlayer().getShoots()[0];
+        arr[1] = control.getCurrentPlayer().getShoots()[1];
+        arr[2] = control.getCurrentPlayer().getShoots()[2];
         assertArrayEquals(new int[]{50, 60, 76}, arr);
     }
 }

@@ -12,6 +12,7 @@ public class ModelTest {
 
     @Test
     public void setNumber() {
+        control.setModel();
         control.getModel().setRandomNumber(78);
         control.checkForDiapason(50);
         assertEquals(50, control.getModel().getEnteredValue());
@@ -19,6 +20,7 @@ public class ModelTest {
 
     @Test
     public void getNumbers(){
+        control.setModel();
         control.getModel().setRandomNumber(78);
         control.checkForDiapason(50);
         assertEquals(50, control.getModel().getNumbers()[0]);
@@ -26,12 +28,14 @@ public class ModelTest {
 
     @Test
     public void getSize() {
+        control.setModel();
         control.checkForDiapason(50);
         assertEquals(1, control.getModel().getSize());
     }
 
     @Test
     public void setDiapason() {
+        control.setModel();
         control.getModel().setRandomNumber(78);
         control.checkForDiapason(50);
         assertEquals(50, control.getModel().getDiapason(Diapason.FIRST));
@@ -41,6 +45,7 @@ public class ModelTest {
 
     @Test
     public void doubleArray(){
+        control.setModel();
         control.getModel().setRandomNumber(78);
         for(int i = 0; i < 11; i++)
             control.checkForDiapason(50);
