@@ -6,7 +6,7 @@ public class Main{
         Player Mike = new Player("Mike");
         control.register(Mike);
         control.start(Mike);
-        //control.viewStatisticOfPlayer(Mike);
+
         Player Nick = new Player("Nick");
         control.register(Nick);
         control.start(Nick);
@@ -15,6 +15,6 @@ public class Main{
 
         control.viewNumberOfAttempts(Mike);
 
-        //control.viewStatisticTable();
+        control.viewStatisticTable();
     }
 }
