@@ -59,6 +59,7 @@ public class Part_3 {
             else if(indexes[i] == firstInd)
                 thirdValue = wordsArray[i];
         }
+
         System.out.println(new StringBuilder(firstValue.toUpperCase()).reverse().toString() + ", "
                 + new StringBuilder(secondValue.toUpperCase()).reverse().toString() + ", "
                 + new StringBuilder(thirdValue.toUpperCase()).reverse().toString());
