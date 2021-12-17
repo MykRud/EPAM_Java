@@ -37,18 +37,15 @@ public class CityService extends Service {
             listOfCities = new ArrayList<>();
     }
 
-    @Override
-    public void addCity(String name, String nameOfCountry, int population, boolean isCapital) throws ServiceExceptions {
-        if (name.isBlank())
-            throw new ServiceExceptions(Errors.EMPTY_CITY_NAME_ERROR.toString());
-        else if (nameOfCountry.isBlank())
-            throw new ServiceExceptions(Errors.EMPTY_COUNTRY_OF_CITY_ERROR.toString());
-        else if (population < 0)
-            throw new ServiceExceptions(Errors.NEGATIVE_POPULATION_ERROR.toString());
-        else if (getCountryService().findCountry(nameOfCountry) == null)
+    public void add(String name, String nameOfCountry, int population, boolean isCapital) throws ServiceExceptions {
+        for(City city : listOfCities)
+            if(city.getNameOfCity().equals(name))
+                throw new ServiceExceptions(Errors.CITY_EXISTS.toString());
+
+        else if (getCountryService().find(nameOfCountry) == null)
             throw new ServiceExceptions(Errors.COUNTRY_NOT_FOUND_ERROR.toString());
         City city = new City(name, nameOfCountry, population, isCapital, listOfCities.size());
-        Country country = getCountryService().findCountry(nameOfCountry);
+        Country country = getCountryService().find(nameOfCountry);
         List<City> cities = country.getListOfCities();
         cities.add(city);
         country.setListOfCities(cities);
@@ -61,37 +58,15 @@ public class CityService extends Service {
         listOfCities.removeIf(city -> city.getNameOfCity().equals(name));
     }
 
-    public List<City> findAllCitiesOfCountry(int code) throws ServiceExceptions {
-        if (getCountryService().findCountry(code) == null)
-            throw new ServiceExceptions(Errors.COUNTRY_NOT_FOUND_ERROR.toString());
-        List<City> citiesOfCountry = new ArrayList<>();
-        for (City city : listOfCities) {
-            if (city.getCodeOfCity() == code)
-                citiesOfCountry.add(city);
-        }
-        return citiesOfCountry;
-    }
-
-    public List<City> findAllCitiesOfCountry(String nameOfCountry) throws ServiceExceptions {
-        if (getCountryService().findCountry(nameOfCountry) == null)
-            throw new ServiceExceptions(Errors.COUNTRY_NOT_FOUND_ERROR.toString());
-        List<City> citiesOfCountry = new ArrayList<>();
-        for (City city : listOfCities) {
-            if (city.getCountryOfCity().equals(nameOfCountry))
-                citiesOfCountry.add(city);
-        }
-        return citiesOfCountry;
-    }
-
     public void changePopulationOfCity(String nameOfCity, int newPopulation) throws ServiceExceptions {
-        if (findCity(nameOfCity) == null)
+        if (find(nameOfCity) == null)
             throw new ServiceExceptions(Errors.CITY_NOT_FOUND_ERROR.toString());
         for (City city : listOfCities)
             if (city.getNameOfCity().equals(nameOfCity))
                 city.setPopulation(newPopulation);
     }
 
-    public City findCity(String nameOfCity) {
+    public City find(String nameOfCity) {
         for (City city : listOfCities) {
             if (city.getNameOfCity().equals(nameOfCity))
                 return city;
@@ -99,7 +74,7 @@ public class CityService extends Service {
         return null;
     }
 
-    public City findCity(int code) {
+    public City find(int code) {
         for (City city : listOfCities) {
             if (city.getCodeOfCity() == code)
                 return city;
@@ -107,8 +82,7 @@ public class CityService extends Service {
         return null;
     }
 
-    @Override
-    public List<City> getListOfCities() {
+    public List<City> getList() {
         return listOfCities;
     }
 }

@@ -1,5 +1,9 @@
 package com.company.FinalTask.ui;
 
-public class View {
+import java.util.List;
 
+public class View {
+    public static void print(String message){
+        System.out.println(message);
+    }
 }

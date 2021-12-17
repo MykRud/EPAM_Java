@@ -73,7 +73,18 @@ public class City implements Serializable {
         isCapital = capital;
     }
 
-    public String toString() {
+    @Override
+
+    public String toString(){
         return nameOfCity;
+    }
+
+    public String deepToString() {
+        return "Код міста=" + codeOfCity +
+                ", назва міста='" + nameOfCity + '\'' +
+                ", населення=" + population +
+                ", столиця=" + isCapital +
+                ", до якої країни відноситься='" + countryOfCity + '\'' +
+                '}';
     }
 }
