@@ -2,23 +2,24 @@ package com.company.Taks_8;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Part_2{
     public static void main(String[] args) throws FileNotFoundException {
         // Створюємо абстракцію файла
-        String separator = File.separator;
-        String path = "C:" + separator + "Users" + separator + "Keeper" + separator + "Desktop" + separator + "words1.txt";
-        File file = new File(path);
-
-        // Передаємо файл в сканер
-        Scanner scan = new Scanner(file);
+        Scanner scan = getScanner("words1.txt");
 
         // Створюємо масив з тексту файла
-        String fromFile = scan.nextLine();
-        String[] wordsArray = fromFile.split(" ");
+        String[] wordsArray = getWords(scan);
 
+        char[][] lengths = calculate(wordsArray);
+
+        for(int i = 0; i < lengths.length; i++){
+            System.out.println(wordsArray[i] + " => " + lengths[i].length);
+        }
+    }
+
+    public static char[][] calculate(String[] wordsArray) {
         boolean isSorted = false;
         String temp;
         while (!isSorted) {
@@ -38,10 +39,23 @@ public class Part_2{
         for(int i = 0; i < lengths.length; i++){
             lengths[i] = wordsArray[i].toCharArray();
         }
+        return lengths;
+    }
 
-        for(int i = 0; i < lengths.length; i++){
-            System.out.println(wordsArray[i] + " => " + lengths[i].length);
-        }
+    public static String[] getWords(Scanner scan) {
+        String fromFile = scan.nextLine();
+        String[] wordsArray = fromFile.split(" ");
+        return wordsArray;
+    }
+
+    public static Scanner getScanner(String fileName) throws FileNotFoundException {
+        String separator = File.separator;
+        String path = "src"+separator+"com"+separator+"company"+separator+"Taks_8"+separator+fileName;
+        File file = new File(path);
+
+        // Передаємо файл в сканер
+        Scanner scan = new Scanner(file);
+        return scan;
     }
 
 }

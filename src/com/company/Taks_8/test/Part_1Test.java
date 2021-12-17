@@ -1,5 +1,6 @@
-package com.company.Taks_8;
+package com.company.Taks_8.test;
 
+import com.company.Taks_8.Part_1;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
