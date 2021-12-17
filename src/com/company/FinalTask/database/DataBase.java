@@ -21,18 +21,16 @@ import java.util.List;
 
 public class DataBase {
 
-    public static final String PACKAGE = CountryService.class.getPackage().getName();
-
     private JAXBContext jc;
 
     private static final String FILE_OF_COUNTRY_XML = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"countries.xml";
+                         +File.separator+"FinalTask"+File.separator+"xml"+File.separator+"countries.xml";
     private static final String FILE_OF_CITY_XML = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"cities.xml";
+                         +File.separator+"FinalTask"+File.separator+"xml"+File.separator+"cities.xml";
     private static final String FILE_OF_COUNTRY_XSD = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"countries.xsd";
+                         +File.separator+"FinalTask"+File.separator+"xsd"+File.separator+"countries.xsd";
     private static final String FILE_OF_CITY_XSD = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"cities.xsd";
+                         +File.separator+"FinalTask"+File.separator+"xsd"+File.separator+"cities.xsd";
 
     private File fileOfCityXML;
     private File fileOfCountryXSD;
@@ -44,7 +42,7 @@ public class DataBase {
 
 
     public DataBase() throws JAXBException {
-        jc = JAXBContext.newInstance(PACKAGE);
+        jc = JAXBContext.newInstance(ObjectFactory.class);
     }
 
     public void save(CountryService countryService) {

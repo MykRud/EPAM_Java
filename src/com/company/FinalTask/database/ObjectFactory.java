@@ -1,6 +1,8 @@
-package com.company.FinalTask.business.services;
+package com.company.FinalTask.database;
 
 
+import com.company.FinalTask.business.services.CityService;
+import com.company.FinalTask.business.services.CountryService;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;

@@ -48,10 +48,11 @@ public class CountryService extends Service {
     public void remove(String name) throws ServiceExceptions {
         if (name.isBlank())
             throw new ServiceExceptions(Errors.EMPTY_COUNTRY_NAME_ERROR.toString());
-        listOfCountries.removeIf(city -> city.getNameOfCountry().equals(name));
+
         List<City> cities = findAllCitiesOfCountry(name);
         for (City city : cities)
             getCityService().remove(city.getNameOfCity());
+        listOfCountries.removeIf(country -> country.getNameOfCountry().equals(name));
     }
 
     public Country find(String nameOfCountry) {
