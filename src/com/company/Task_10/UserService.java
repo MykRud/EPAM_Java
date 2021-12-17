@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -45,5 +44,17 @@ public class UserService {
             if(listOfUsers.get(i).getSummaryIncome().compareTo(listOfUsers.get(i+1).getSummaryIncome()) < 0)
                 user = listOfUsers.get(i+1);
         return user;
+    }
+    public User getMinIncome(){
+        User user = listOfUsers.get(0);
+        for(int i = 0; i < listOfUsers.size()-1; i++)
+            if(listOfUsers.get(i).getSummaryIncome().compareTo(listOfUsers.get(i+1).getSummaryIncome()) > 0)
+                user = listOfUsers.get(i+1);
+        return user;
+    }
+    public BigDecimal getMiddleIncome(){
+        User max = getMaxIncome();
+        User min = getMinIncome();
+        return (max.getSummaryIncome().add(min.getSummaryIncome())).divide(BigDecimal.valueOf(2));
     }
 }
