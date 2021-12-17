@@ -1,5 +1,7 @@
 package com.company.FinalTask.business.entities;
 
+
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -9,14 +11,14 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.NONE)
 public class City implements Serializable {
     @XmlElement
-    private int codeOfCity = 0;
+    private int codeOfCity;
     @XmlElement
     private String nameOfCity;
     @XmlElement
     private int population;
     @XmlElement
     private boolean isCapital;
-
+    @XmlElement
     private String countryOfCity;
 
     public City() {

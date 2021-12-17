@@ -3,7 +3,6 @@ package com.company.FinalTask.business.services;
 import com.company.FinalTask.business.entities.City;
 import com.company.FinalTask.business.entities.Country;
 import com.company.FinalTask.business.exception.ServiceExceptions;
-import com.company.FinalTask.database.DataBase;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.annotation.*;
 import org.xml.sax.SAXException;
@@ -20,14 +19,11 @@ public class CountryService extends Service {
     @XmlElement(name = "country")
     private List<Country> listOfCountries;
 
-    private DataBase dataBase;
-
     public CountryService() throws JAXBException, IOException {
     } // Потребується для XML серіалізації
 
     public CountryService(CityService cityService) throws SAXException, JAXBException {
-        dataBase = new DataBase();
-        listOfCountries = dataBase.readCountries();
+        listOfCountries = getDataBase().readCountries();
         setCityService(cityService);
         if (listOfCountries == null)
             listOfCountries = new ArrayList<>();
@@ -35,12 +31,11 @@ public class CountryService extends Service {
 
     @Override
     public void save() {
-        dataBase.save(this);
+        getDataBase().save(this);
     }
 
-    @Override
     public void read() throws SAXException {
-        listOfCountries = dataBase.readCountries();
+        listOfCountries = getDataBase().readCountries();
     }
 
     public void addCountry(String name) throws ServiceExceptions {
@@ -77,10 +72,5 @@ public class CountryService extends Service {
     public List<Country> getListOfCountries() {
         return listOfCountries;
     }
-
-    public void clearUp() {
-        listOfCountries = null;
-    }
-
 
 }

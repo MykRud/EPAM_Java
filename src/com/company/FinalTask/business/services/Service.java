@@ -12,18 +12,20 @@ import org.xml.sax.SAXException;
 
 import java.util.List;
 
+
 @XmlAccessorType(XmlAccessType.NONE)
 public class Service implements CRUDable{
     @XmlTransient
     private CountryService countryService;
     @XmlTransient
     private CityService cityService;
-    //private DataBase dataBase;
+    @XmlTransient
+    public static DataBase dataBase;
 
 
     public void run() throws JAXBException, SAXException {
-        //dataBase= new DataBase();
-        cityService = new CityService();
+        dataBase = new DataBase();
+        cityService = new CityService(true);
         countryService = new CountryService(cityService);
         cityService.setCountryService(countryService);
 
@@ -37,9 +39,9 @@ public class Service implements CRUDable{
         return cityService;
     }
 
-   // public DataBase getDataBase() {
-     //   return dataBase;
-    //}
+    public DataBase getDataBase() {
+        return dataBase;
+    }
 
     public void setCountryService(CountryService countryService) {
         this.countryService = countryService;
@@ -49,9 +51,9 @@ public class Service implements CRUDable{
         this.cityService = cityService;
     }
 
-    //public void setDataBase(DataBase dataBase) {
-      //  this.dataBase = dataBase;
-    //}
+    public void setDataBase(DatacfBase dataBase) {
+        Service.dataBase = dataBase;
+    }
 
     public void addCountry(String name) throws ServiceExceptions{
         countryService.addCountry(name);
@@ -64,6 +66,7 @@ public class Service implements CRUDable{
     public void read() throws SAXException {
         countryService.read();
         cityService.read();
+
     }
 
     public void save(){

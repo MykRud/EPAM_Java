@@ -3,9 +3,9 @@ package com.company.FinalTask.business.services;
 import com.company.FinalTask.business.entities.City;
 import com.company.FinalTask.business.entities.Country;
 import com.company.FinalTask.business.exception.ServiceExceptions;
-import com.company.FinalTask.database.DataBase;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.annotation.*;
+import org.xml.sax.SAXException;
 
 
 import java.util.ArrayList;
@@ -15,25 +15,24 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Cities")
 public class CityService extends Service {
-    @XmlElementWrapper(name = "ListOfCities")
-    @XmlElement(name = "City")
-    private List<City> listOfCities;
 
-    private DataBase dataBase;
+    @XmlElement(name = "city")
+    private List<City> listOfCities;
 
     @Override
     public void save() {
-        dataBase.save(this);
+        getDataBase().save(this);
     }
 
-    @Override
-    public void read() {
-        listOfCities = dataBase.readCities();
+    public void read() throws SAXException {
+        listOfCities = getDataBase().readCities();
     }
 
-    public CityService() throws JAXBException {
-        dataBase = new DataBase();
-        listOfCities = dataBase.readCities();
+    public CityService() throws JAXBException, SAXException{
+    } // Потребується для XML серіалізації
+
+    public CityService(boolean b) throws JAXBException, SAXException {
+        listOfCities = getDataBase().readCities();
         if (listOfCities == null)
             listOfCities = new ArrayList<>();
     }

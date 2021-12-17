@@ -3,19 +3,14 @@
   <xs:element name="cityService">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="ListOfCities">
+        <xs:element maxOccurs="unbounded" name="city">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="City">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="codeOfCity" type="xs:unsignedByte" />
-                    <xs:element name="nameOfCity" type="xs:string" />
-                    <xs:element name="population" type="xs:unsignedInt" />
-                    <xs:element name="isCapital" type="xs:boolean" />
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
+              <xs:element name="codeOfCity" type="xs:unsignedByte" />
+              <xs:element name="nameOfCity" type="xs:string" />
+              <xs:element name="population" type="xs:unsignedInt" />
+              <xs:element name="isCapital" type="xs:boolean" />
+              <xs:element name="countryOfCity" type="xs:string" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
