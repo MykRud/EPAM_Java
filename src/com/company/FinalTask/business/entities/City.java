@@ -53,24 +53,8 @@ public class City implements Serializable {
         return isCapital;
     }
 
-    public void setCodeOfCity(int codeOfCity) {
-        this.codeOfCity = codeOfCity;
-    }
-
-    public void setCountryOfCity(String countryOfCity) {
-        this.countryOfCity = countryOfCity;
-    }
-
-    public void setNameOfCity(String nameOfCity) {
-        this.nameOfCity = nameOfCity;
-    }
-
     public void setPopulation(int population) {
         this.population = population;
-    }
-
-    public void setCapital(boolean capital) {
-        isCapital = capital;
     }
 
     @Override
