@@ -20,30 +20,30 @@ class CityTest {
     }
 
     @Test
-    void getCodeOfCity() throws JAXBException, SAXException, ServiceExceptions {
+    void getCodeOfCity(){
         assertEquals(service.getCityService().find("NewCity").getCodeOfCity(), service.getCityService().getList().size());
     }
 
     @Test
-    void getCountryOfCity() throws JAXBException, SAXException, ServiceExceptions {
+    void getCountryOfCity(){
         int length = service.getCityService().getList().size();
         assertEquals("NewCountry", service.getCityService().getList().get(length-1).getCountryOfCity());
     }
 
     @Test
-    void getNameOfCity() throws JAXBException, SAXException, ServiceExceptions {
+    void getNameOfCity(){
         int length = service.getCityService().getList().size();
         assertEquals(service.getCityService().find("NewCity").getNameOfCity(), service.getCityService().getList().get(length-1).getNameOfCity());
     }
 
     @Test
-    void getPopulation() throws JAXBException, SAXException, ServiceExceptions {
+    void getPopulation(){
         int length = service.getCityService().getList().size();
         assertEquals(2000000, service.getCityService().getList().get(length-1).getPopulation());
     }
 
     @Test
-    void isCapital() throws JAXBException, SAXException, ServiceExceptions {
+    void isCapital(){
         int length = service.getCityService().getList().size();
         assertFalse(service.getCityService().getList().get(length-1).isCapital());
     }

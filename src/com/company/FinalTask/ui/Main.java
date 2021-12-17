@@ -1,16 +1,13 @@
-package com.company.FinalTask;
+package com.company.FinalTask.ui;
 
 import com.company.FinalTask.business.exception.ServiceExceptions;
 import com.company.FinalTask.business.services.Errors;
 import com.company.FinalTask.business.services.Service;
-import com.company.FinalTask.ui.View;
 import jakarta.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import java.util.InputMismatchException;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 
 public class Main {
@@ -42,13 +39,7 @@ public class Main {
             }
             try {
             String[] result = str.split(" ");
-            StringBuilder answer = new StringBuilder(result[0] + " " + result[1]);
-            //if(result.length != 2)
-              //   new StringBuilder(result[2]);
-            //for(int i = 2; i < result.length; i++)
-              //  value.append(" ").append(result[i]);
-
-                switch (answer.toString()) {
+                switch (result[0] + " " + result[1]) {
                     case ("/add country") -> service.addCountry(result[2]);
                     case ("/add city") -> {
                         View.print("Введіть назву країни, до якої відноситься місто: ");

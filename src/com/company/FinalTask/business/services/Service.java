@@ -21,8 +21,6 @@ public class Service implements CRUDable {
     @XmlTransient
     private static View view;
 
-
-
     public void run() throws JAXBException, SAXException {
         dataBase = new DataBase();
         view = new View();
@@ -30,10 +28,6 @@ public class Service implements CRUDable {
         countryService = new CountryService(cityService);
         cityService.setCountryService(countryService);
 
-    }
-
-    public static View getView() {
-        return view;
     }
 
     public CountryService getCountryService() {
@@ -113,10 +107,8 @@ public class Service implements CRUDable {
         try {
             if (value.matches("[0-9]+")) {
                 View.print(countryService.find(Integer.parseInt(value)).toString());
-                return;
             } else if (value.matches("[a-zA-Z]+")) {
                 View.print(countryService.find(value).toString());
-                return;
             }
             else{
                 throw new ServiceExceptions(Errors.SYNTAX_ERROR.toString());

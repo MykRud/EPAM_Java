@@ -44,14 +44,6 @@ public class Country implements Serializable {
         return nameOfCountry;
     }
 
-    public void setCodeOfCountry(int codeOfCountry) {
-        this.codeOfCountry = codeOfCountry;
-    }
-
-    public void setNameOfCountry(String nameOfCountry) {
-        this.nameOfCountry = nameOfCountry;
-    }
-
     public String toString() {
         return nameOfCountry;
     }

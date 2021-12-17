@@ -4,15 +4,11 @@ import com.company.FinalTask.business.entities.City;
 import com.company.FinalTask.business.entities.Country;
 import com.company.FinalTask.business.exception.ServiceExceptions;
 import com.company.FinalTask.business.services.Service;
-import com.company.Taks_8.Part_1;
 import jakarta.xml.bind.JAXBException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,8 +47,10 @@ class CountryServiceTest {
         service.removeCountry("NewCountry");
         boolean isRemoved = true;
         for(Country country : service.getCountryService().getList())
-            if(country.getNameOfCountry().equals("NewCountry"))
+            if (country.getNameOfCountry().equals("NewCountry")) {
                 isRemoved = false;
+                break;
+            }
         assertTrue(isRemoved);
     }
 
