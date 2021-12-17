@@ -2,38 +2,50 @@ package com.company.Taks_8;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Part_1 {
+
     public static void main(String[] args) throws FileNotFoundException {
-        // Створюємо абстракцію файла
-        String separator = File.separator;
-        String path = "C:" + separator + "Users" + separator + "Keeper" + separator + "Desktop" + separator + "words.txt";
-        File file = new File(path);
 
-        // Передаємо файл в сканер
-        Scanner scan = new Scanner(file);
+        File file = createFile("words.txt");
 
-        // Створюємо масив з тексту файла
-        String fromFile = scan.nextLine();
-        String[] wordsArray = fromFile.split(" ");
+        String[] wordsArray = getArrayFromFile(file);
+
 
         // Сортуємо масив слів
         Arrays.sort(wordsArray);
 
         // Визначаємо кількість слів у файлі
-        int numberOfWords = 0;
-        for (int i = 0; i < wordsArray.length - 1; i++) {
-            if (!Objects.equals(wordsArray[i], wordsArray[i + 1]))
-                numberOfWords++;
-        }
-        numberOfWords++;
+        int numberOfWords = getNumberOfWords(wordsArray);
 
+        String[][] array = calculate(wordsArray, numberOfWords);
+
+        for (int q = 0; q < 3; q++) {
+            System.out.println(array[q][0] + " => " + array[q].length);
+        }
+    }
+
+    public static File createFile(String nameOfFile){
+        // Створюємо абстракцію файла
+        String separator = File.separator;
+
+        String path = "src"+separator+"com"+separator+"company"+separator+"Taks_8"+separator+nameOfFile;
+        File file = new File(path);
+
+        return file;
+    }
+
+    public static String[] getArrayFromFile(File file) throws FileNotFoundException {
+        Scanner scan = new Scanner(file);
+        String fromFile = scan.nextLine();
+        return fromFile.split(" ");
+    }
+
+    public static String[][] calculate(String[] wordsArray, int numberOfWords) {
         String[][] array = new String[numberOfWords][];
-        //System.out.println(numberOfWords);
 
         // Визначаємо кількість окремо взятого слова. Спочатку створюємо пустий масив (заповнений нулями)
         int[] firstWord = new int[wordsArray.length];
@@ -69,7 +81,7 @@ public class Part_1 {
             }
         }
 
-        // Sorting
+        // Сорутвання
         boolean isSorted = false;
         String[] temp;
         while (!isSorted) {
@@ -84,8 +96,17 @@ public class Part_1 {
                 }
             }
         }
-        for (int q = 0; q < 3; q++) {
-            System.out.println(array[q][0] + " => " + array[q].length);
+        return array;
+
+    }
+
+    public static int getNumberOfWords(String[] arrayOfWords) {
+        int numberOfWords = 0;
+        for (int i = 0; i < arrayOfWords.length - 1; i++) {
+            if (!Objects.equals(arrayOfWords[i], arrayOfWords[i + 1]))
+                numberOfWords++;
         }
+        numberOfWords++;
+        return numberOfWords;
     }
 }
