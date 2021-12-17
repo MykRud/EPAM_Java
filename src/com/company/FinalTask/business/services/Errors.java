@@ -11,7 +11,8 @@ public enum Errors {
     CITY_EXISTS("Таке місто вже існує"),
     COUNTRY_SYNTAX_ERROR("Не вірно введена назва країни"),
     CITY_SYNTAX_ERROR("Не вірно введена назва міста"),
-    SYNTAX_ERROR("Не вірно введені дані");
+    SYNTAX_ERROR("Не вірно введені дані"),
+    DATABASE_ERROR("Помилка з базою даних");
 
     private final String meaning;
 
