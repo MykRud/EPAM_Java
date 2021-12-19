@@ -21,18 +21,18 @@ public class CityService extends Service {
 
     @Override
     public void save() {
-        getDataBase().save(this);
+        getDataBase().save(this, "cities.xml");
     }
 
     public void read() throws SAXException {
-        listOfCities = getDataBase().readCities();
+        listOfCities = getDataBase().readCities("cities.xml", "cities.xsd");
     }
 
     public CityService() throws JAXBException, SAXException{
     } // Потребується для XML серіалізації
 
     public CityService(boolean b) throws JAXBException, SAXException {
-        listOfCities = getDataBase().readCities();
+        listOfCities = getDataBase().readCities("cities.xml", "cities.xsd");
         if (listOfCities == null)
             listOfCities = new ArrayList<>();
     }
@@ -56,6 +56,15 @@ public class CityService extends Service {
         if (name.isBlank())
             throw new ServiceExceptions(Errors.EMPTY_CITY_NAME_ERROR.toString());
         listOfCities.removeIf(city -> city.getNameOfCity().equals(name));
+    }
+
+    public void removeCity(String name) throws ServiceExceptions {
+        if (name.isBlank())
+            throw new ServiceExceptions(Errors.EMPTY_CITY_NAME_ERROR.toString());
+        City city = find(name);
+        Country country = getCountryService().find(city.getCountryOfCity());
+        country.getListOfCities().removeIf(city1 -> city1.getNameOfCity().equals(name));
+        remove(name);
     }
 
     public void changePopulationOfCity(String nameOfCity, int newPopulation) throws ServiceExceptions {

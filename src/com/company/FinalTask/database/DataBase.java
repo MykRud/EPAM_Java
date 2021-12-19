@@ -23,14 +23,7 @@ public class DataBase {
 
     private JAXBContext jc;
 
-    private static final String FILE_OF_COUNTRY_XML = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"xml"+File.separator+"countries.xml";
-    private static final String FILE_OF_CITY_XML = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"xml"+File.separator+"cities.xml";
-    private static final String FILE_OF_COUNTRY_XSD = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"xsd"+File.separator+"countries.xsd";
-    private static final String FILE_OF_CITY_XSD = "src"+File.separator+"com"+File.separator+"company"
-                         +File.separator+"FinalTask"+File.separator+"xsd"+File.separator+"cities.xsd";
+
 
     private File fileOfCityXML;
     private File fileOfCountryXSD;
@@ -45,8 +38,8 @@ public class DataBase {
         jc = JAXBContext.newInstance(ObjectFactory.class);
     }
 
-    public void save(CountryService countryService) {
-        try (OutputStream os = new FileOutputStream(FILE_OF_COUNTRY_XML)) {
+    public void save(CountryService countryService, String file) {
+        try (OutputStream os = new FileOutputStream(DataPresentation.getPathXML(file))) {
             jc = JAXBContext.newInstance(CountryService.class);
             Marshaller m = jc.createMarshaller();
             m.marshal(countryService, os);
@@ -55,9 +48,9 @@ public class DataBase {
         }
     }
 
-    public void save(CityService cityService) {
+    public void save(CityService cityService, String file) {
 
-        try (OutputStream os = new FileOutputStream(FILE_OF_CITY_XML)) {
+        try (OutputStream os = new FileOutputStream(DataPresentation.getPathXML(file))) {
             jc = JAXBContext.newInstance(CityService.class);
             Marshaller m = jc.createMarshaller();
             m.marshal(cityService, os);
@@ -66,13 +59,13 @@ public class DataBase {
         }
     }
 
-    public List<Country> readCountries() throws SAXException {
+    public List<Country> readCountries(String fileXML, String fileXSD) throws SAXException {
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File(FILE_OF_COUNTRY_XSD));
+        Schema schema = sf.newSchema(new File(DataPresentation.getPathXSD(fileXSD)));
 
         CountryService cs = null;
-        File xmlFile = new File(FILE_OF_COUNTRY_XML);
+        File xmlFile = new File(DataPresentation.getPathXML(fileXML));
 
         try (InputStream in = new FileInputStream(xmlFile)) {
 
@@ -89,13 +82,13 @@ public class DataBase {
         return cs != null ? cs.getList() : new ArrayList<>();
     }
 
-    public List<City> readCities() throws SAXException {
+    public List<City> readCities(String fileXML, String fileXSD) throws SAXException {
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File(FILE_OF_CITY_XSD));
+        Schema schema = sf.newSchema(new File(DataPresentation.getPathXSD(fileXSD)));
 
         CityService cs = null;
-        File xmlFile = new File(FILE_OF_CITY_XML);
+        File xmlFile = new File(DataPresentation.getPathXML(fileXML));
         try (InputStream in = new FileInputStream(xmlFile)) {
             jc = JAXBContext.newInstance(CityService.class);
             Unmarshaller jaxbUnmarshaller = jc.createUnmarshaller();

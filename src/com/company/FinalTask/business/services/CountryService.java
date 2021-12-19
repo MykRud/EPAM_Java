@@ -23,7 +23,7 @@ public class CountryService extends Service {
     } // Потребується для XML серіалізації
 
     public CountryService(CityService cityService) throws SAXException, JAXBException {
-        listOfCountries = getDataBase().readCountries();
+        listOfCountries = getDataBase().readCountries("countries.xml", "countries.xsd");
         setCityService(cityService);
         if (listOfCountries == null)
             listOfCountries = new ArrayList<>();
@@ -31,11 +31,11 @@ public class CountryService extends Service {
 
     @Override
     public void save() {
-        getDataBase().save(this);
+        getDataBase().save(this, "countries.xml");
     }
 
     public void read() throws SAXException {
-        listOfCountries = getDataBase().readCountries();
+        listOfCountries = getDataBase().readCountries("countries.xml", "countries.xsd");
     }
 
     public void addCountry(String name) throws ServiceExceptions {

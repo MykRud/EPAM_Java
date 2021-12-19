@@ -92,7 +92,7 @@ public class Service implements CRUDable {
     }
 
     public void removeCity(String name) throws ServiceExceptions{
-        cityService.remove(name);
+        cityService.removeCity(name);
     }
 
     public void getListOfCountries(){
