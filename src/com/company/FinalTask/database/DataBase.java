@@ -8,9 +8,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
@@ -22,17 +20,6 @@ import java.util.List;
 public class DataBase {
 
     private JAXBContext jc;
-
-
-
-    private File fileOfCityXML;
-    private File fileOfCountryXSD;
-    private File fileOfCityXSD;
-
-    {
-        String separator = File.separator;
-    }
-
 
     public DataBase() throws JAXBException {
         jc = JAXBContext.newInstance(ObjectFactory.class);
@@ -102,4 +89,15 @@ public class DataBase {
         return cs != null ? cs.getList() : new ArrayList<>();
     }
 
+    private static class DataPresentation {
+        public static String getPathXML(String path){
+            return "src"+ File.separator+"com"+File.separator+"company"
+                    +File.separator+"FinalTask"+File.separator+"xml"+File.separator+path;
+        }
+
+        public static String getPathXSD(String path){
+            return "src"+File.separator+"com"+File.separator+"company"
+                    +File.separator+"FinalTask"+File.separator+"xsd"+File.separator+path;
+        }
+    }
 }
