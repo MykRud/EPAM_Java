@@ -53,6 +53,12 @@ class CityServiceTest {
     }
 
     @Test
+    void testRemove() throws ServiceExceptions {
+        assertThrows(ServiceExceptions.class, () -> service.removeCity(""));
+        assertThrows(ServiceExceptions.class, () -> service.getCityService().remove(""));
+    }
+
+    @Test
     void changePopulationOfCity() throws ServiceExceptions {
         service.changePopulationOfCity("NewCity", 123123);
         assertEquals(123123, service.getCityService().find("NewCity").getPopulation());
