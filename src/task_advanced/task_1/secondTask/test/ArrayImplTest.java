@@ -1,18 +1,20 @@
 package task_advanced.task_1.secondTask.test;
 
-import task_advanced.task_1.secondTask.ArrayImpl;
+import task_advanced.task_1.secondTask.*;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayImplTest {
 
-    static ArrayImpl array;
+    static ArrayImpl<String> array;
 
     @Before
-    public static void init(){
-        array = new ArrayImpl();
+    public static void init() {
+        array = new ArrayImpl<String>();
     }
 
     @Test
@@ -67,5 +69,34 @@ class ArrayImplTest {
         array.add("Hello");
         array.add("Smile");
         assertEquals(2, array.size());
+    }
+
+    @Test
+    void hasNext() {
+        init();
+        array.add("Hello");
+        Iterator<String> iterator = array.iterator();
+        assertTrue(iterator.hasNext());
+    }
+
+    @Test
+    void next() {
+        init();
+        array.add("Hello");
+        Iterator<String> iterator = array.iterator();
+        assertEquals("Hello", iterator.next());
+    }
+
+    @Test
+    void removeIter() {
+        init();
+        array.add("Hello");
+        array.add("Zero");
+        Iterator<String> iterator = array.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().equals("Hello"))
+                iterator.remove();
+        }
+        assertEquals("Zero", array.get(0));
     }
 }

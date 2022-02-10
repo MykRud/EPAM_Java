@@ -3,7 +3,7 @@ package task_advanced.task_1.secondTask;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayImpl implements Array{
+public class ArrayImpl <T> implements Array <T> {
     private Object[] innerArray;
     private int size;
     private final Object[] primaryArray = new Object[10];
@@ -17,14 +17,14 @@ public class ArrayImpl implements Array{
     }
 
     @Override
-    public void add(Object element) {
+    public void add(T element) {
         if(size+1 >= innerArray.length) // Decomposition
             extendInnerArray();
         innerArray[size++] = element;
     }
 
     @Override
-    public void set(int index, Object element) {
+    public void set(int index, T element) {
         if(size >= innerArray.length)
             extendInnerArray();
 
@@ -43,15 +43,15 @@ public class ArrayImpl implements Array{
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         if(index > size)
             return null;
-        return innerArray[index];
+        return (T)innerArray[index];
     }
 
     @Override
-    public int indexOf(Object element) {
-        for(int i = 0; i < innerArray.length; i++){
+    public int indexOf(T element) {
+        for(int i = 0; i < size; i++){
             if(innerArray[i].equals(element))
                 return i;
         }
@@ -75,15 +75,6 @@ public class ArrayImpl implements Array{
         }
         innerArray = newArray;
         size--;
-    }
-
-    public void remove(Object obj){
-        for(int i = 0; i < innerArray.length; i++){
-            if(innerArray[i].equals(obj)){
-                remove(i);
-                break;
-            }
-        }
     }
 
     @Override
@@ -110,7 +101,7 @@ public class ArrayImpl implements Array{
         return new IteratorImpl();
     }
 
-    private class IteratorImpl implements Iterator<Object> {
+    private class IteratorImpl implements Iterator<T> {
 
         private int currentPosition = -1;
 
@@ -120,10 +111,10 @@ public class ArrayImpl implements Array{
         }
 
         @Override
-        public Object next() {
+        public T next() {
             if(currentPosition == size)
                 throw new NoSuchElementException();
-            return innerArray[++currentPosition];
+            return (T)innerArray[++currentPosition];
         }
 
         @Override
@@ -141,22 +132,21 @@ public class ArrayImpl implements Array{
     }
 
     public static void main(String[] args) {
-        ArrayImpl array = new ArrayImpl();
+        ArrayImpl<String> array = new ArrayImpl<String>();
 
-        array.add(100);
-        array.add(200);
-        array.add(300);
-        array.add("Hello");
+        array.add("firstWord");
+        array.add("secondWord");
+        array.add("thirdWord");
 
         System.out.println("Array after adding: " + array + ", Size: " + array.size());
 
-        array.set(2, "new String");
+        array.set(2, "newString");
 
         System.out.println("Array after set(): " + array + ", Size: " + array.size());
 
         System.out.println("Element with index 0: " + array.get(0));
 
-        System.out.println("The index of the element 200: " + array.indexOf(200));
+        System.out.println("The index of the element \"secondWord\": " + array.indexOf("second_Word"));
 
         array.remove(2);
         System.out.println("Array after removing: " + array + ", Size: " + array.size());
@@ -165,15 +155,15 @@ public class ArrayImpl implements Array{
             System.out.println(obj.toString());
         }
 
-        array.add(0);
+        array.add("zero");
         array.add("Smile");
-        array.add(0);
+        array.add("zero");
         System.out.println("Array before removing with iterator: " + array);
 
-        Iterator<Object> iterator = array.iterator();
+        Iterator<String> iterator = array.iterator();
         while(iterator.hasNext()) {
-            Object toRemove = iterator.next();
-            if (toRemove.equals(0))
+            String toRemove = iterator.next();
+            if (toRemove.equals("zero"))
                 iterator.remove();
         }
         System.out.println("Array after removing with iterator: " + array);
