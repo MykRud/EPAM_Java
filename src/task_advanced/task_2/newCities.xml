@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17" class="java.beans.XMLDecoder">
+ <array class="java.lang.Object" length="5">
+  <void index="0">
+   <object class="task_advanced.task_2.businessLogic.entities.City">
+    <void property="capital">
+     <boolean>true</boolean>
+    </void>
+    <void property="codeOfCity">
+     <int>1</int>
+    </void>
+    <void property="country">
+     <string>USA</string>
+    </void>
+    <void property="name">
+     <string>Washington</string>
+    </void>
+    <void property="population">
+     <int>10000000</int>
+    </void>
+   </object>
+  </void>
+  <void index="1">
+   <object class="task_advanced.task_2.businessLogic.entities.City">
+    <void property="codeOfCity">
+     <int>2</int>
+    </void>
+    <void property="country">
+     <string>USA</string>
+    </void>
+    <void property="name">
+     <string>Los Angeles</string>
+    </void>
+    <void property="population">
+     <int>6000000</int>
+    </void>
+   </object>
+  </void>
+  <void index="2">
+   <object class="task_advanced.task_2.businessLogic.entities.City">
+    <void property="codeOfCity">
+     <int>3</int>
+    </void>
+    <void property="country">
+     <string>France</string>
+    </void>
+    <void property="name">
+     <string>Leon</string>
+    </void>
+    <void property="population">
+     <int>2000000</int>
+    </void>
+   </object>
+  </void>
+  <void index="3">
+   <object class="task_advanced.task_2.businessLogic.entities.City">
+    <void property="capital">
+     <boolean>true</boolean>
+    </void>
+    <void property="codeOfCity">
+     <int>4</int>
+    </void>
+    <void property="country">
+     <string>Spain</string>
+    </void>
+    <void property="name">
+     <string>Madrid</string>
+    </void>
+    <void property="population">
+     <int>5000000</int>
+    </void>
+   </object>
+  </void>
+  <void index="4">
+   <object class="task_advanced.task_2.businessLogic.entities.City">
+    <void property="capital">
+     <boolean>true</boolean>
+    </void>
+    <void property="codeOfCity">
+     <int>5</int>
+    </void>
+    <void property="country">
+     <string>Ukraine</string>
+    </void>
+    <void property="name">
+     <string>Kyiv</string>
+    </void>
+    <void property="population">
+     <int>2800000</int>
+    </void>
+   </object>
+  </void>
+ </array>
+</java>
