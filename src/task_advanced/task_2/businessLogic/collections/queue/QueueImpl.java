@@ -104,20 +104,6 @@ public class QueueImpl<T> implements Queue<T> {
 
         @Override
         public void remove() {
-            /*Object[] newQueue = new Object[queue.length];
-            int i = 0;
-            int j = 0;
-            while (i != size) {
-                if (queue[i] == queue[currentPosition]) {
-                    j--;
-                    continue;
-                }
-                newQueue[j++] = queue[i++];
-            }
-            queue = newQueue;
-            size--;
-            currentPosition--;*/
-
             Object[] newArray = new Object[queue.length];
             int i = 0;
             int j = 0;
