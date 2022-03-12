@@ -275,6 +275,8 @@ public class IntStringCappedMap implements Map<Integer, String> {
     @Override
     public String toString(){
         Entry currentEntry = head;
+        if(head == null)
+            return "{}";
         StringBuilder sb = new StringBuilder("{");
         for(int i = 0; i < size-1; i++){
             sb.append(currentEntry.getKey()).append("=").append(currentEntry.getValue()).append(", ");

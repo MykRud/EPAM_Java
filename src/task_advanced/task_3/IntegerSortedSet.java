@@ -36,10 +36,10 @@ public class IntegerSortedSet implements Iterable<Integer>{
         Node tempNode = new Node(valueToAdd);
         if(currentNode == head){
             if(head.getValue() > Math.abs(valueToAdd)){
-                tempNode.setNext(currentNode);
                 head = tempNode;
+                tempNode.setNext(currentNode);
             } else{
-                head.setNext(currentNode);
+                head.setNext(tempNode);
             }
             size++;
             return;
@@ -60,6 +60,8 @@ public class IntegerSortedSet implements Iterable<Integer>{
     }
 
     public int remove(int elementToRemove){
+        if(head == null)
+            throw new IllegalArgumentException("Set is empty");
         Node currentNode = head;
         if(currentNode.getValue() == elementToRemove){
             head = currentNode.getNext();
@@ -79,6 +81,8 @@ public class IntegerSortedSet implements Iterable<Integer>{
     }
 
     public int search(int elementToSearch){
+        if(head == null)
+            throw new IllegalArgumentException("Set is empty");
         Node currentNode = head;
         if(currentNode.getValue() == elementToSearch){
             return currentNode.getValue();
@@ -105,19 +109,20 @@ public class IntegerSortedSet implements Iterable<Integer>{
 
     private class IntegerSortedSetIterator implements Iterator<Integer>{
 
-        int currentIndex = -1;
+        int currentIndex = 0;
 
         @Override
         public boolean hasNext() {
-            return size - 1 == currentIndex;
+            return size != currentIndex;
         }
 
         @Override
         public Integer next() {
             Node currentNode = head;
-            for(int i = 0; i < ++currentIndex; i++){
+            for(int i = 0; i < currentIndex; i++){
                 currentNode = currentNode.getNext();
             }
+            currentIndex++;
             return currentNode.getValue();
         }
     }

@@ -1,42 +1,44 @@
 package task_advanced.task_3;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class MedianQueue {
+public class MedianQueue implements Iterable<Integer> {
 
     private Node head;
     private int size;
 
-    public void offer(int elementToPut){
-        if(head == null){
+    public void offer(int elementToPut) {
+        if (head == null) {
             head = new Node(elementToPut);
             size++;
             return;
         }
         Node currentNode = head;
-        while(currentNode.getNext()!= null){
+        while (currentNode.getNext() != null) {
             currentNode = currentNode.getNext();
         }
         currentNode.setNext(new Node(elementToPut));
         size++;
     }
 
-    public int poll(){
+    public int poll() {
         int[] arrayOfNumbers = getArray();
         int temp = 0;
-        if(size % 2 == 0)
+        if (size % 2 == 0)
             temp = 1;
         int median = arrayOfNumbers[arrayOfNumbers.length / 2 - temp];
         Node currentNode = head;
         Node prevNode = head;
-        while(currentNode.getNext() != null){
-            if(currentNode.getValue() == median){
+        while (currentNode.getNext() != null) {
+            if (currentNode.getValue() == median) {
                 break;
             }
             prevNode = currentNode;
             currentNode = currentNode.getNext();
         }
-        if(currentNode == head)
+        if (currentNode == head)
             head = currentNode.getNext();
         else
             prevNode.setNext(currentNode.getNext());
@@ -44,19 +46,19 @@ public class MedianQueue {
         return median;
     }
 
-    public int peek(){
+    public int peek() {
         int[] arrayOfNumbers = getArray();
         int temp = 0;
-        if(size % 2 == 0)
+        if (size % 2 == 0)
             temp = 1;
         return arrayOfNumbers[arrayOfNumbers.length / 2 - temp];
     }
 
-    private int[] getArray(){
+    private int[] getArray() {
         int[] arrayOfNumbers = new int[size];
         Node currentNode = head;
         int i = 0;
-        while (currentNode != null){
+        while (currentNode != null) {
             arrayOfNumbers[i++] = currentNode.getValue();
             currentNode = currentNode.getNext();
         }
@@ -65,7 +67,7 @@ public class MedianQueue {
     }
 
     private void quicksort(int[] array, int low, int high) {
-        if(low < high) {
+        if (low < high) {
             int newIndex = partOfSort(array, low, high);
 
             quicksort(array, low, newIndex - 1);
@@ -90,15 +92,15 @@ public class MedianQueue {
         return (i + 1);
     }
 
-    public String getSortedArray(){
+    public String getSortedArray() {
         return Arrays.toString(getArray());
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder("[");
         Node currentNode = head;
-        for(int i = 0; i < size - 1; i++){
+        for (int i = 0; i < size - 1; i++) {
             sb.append(currentNode.getValue()).append(", ");
             currentNode = currentNode.getNext();
         }
@@ -106,12 +108,39 @@ public class MedianQueue {
         return sb.toString();
     }
 
-    private class Node{
+    @Override
+    public Iterator<Integer> iterator() {
+        return new MedianQueueIterator();
+    }
 
-        private int value;
+    private class MedianQueueIterator implements Iterator<Integer> {
+
+        int currentPosition = -1;
+
+        @Override
+        public boolean hasNext() {
+            return currentPosition != size - 1;
+        }
+
+        @Override
+        public Integer next() {
+            Node currentNode = head;
+            currentPosition++;
+            for (int i = 0; i < currentPosition; i++) {
+                if (currentNode == null)
+                    throw new NoSuchElementException("Element has not been found");
+                currentNode = currentNode.getNext();
+            }
+            return currentNode.getValue();
+        }
+    }
+
+    private static class Node {
+
+        private final int value;
         private Node next;
 
-        public Node(int value){
+        public Node(int value) {
             this.value = value;
         }
 
@@ -128,18 +157,19 @@ public class MedianQueue {
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return String.valueOf(value);
         }
     }
 
     public static void main(String[] args) {
         MedianQueue queue = new MedianQueue();
-        queue.offer(1);
+        queue.offer(5);
         queue.offer(2);
-        queue.offer(3);
-        queue.offer(3);
-        queue.offer(3);
+        queue.offer(24);
+        queue.offer(10);
+        queue.offer(50);
+        queue.offer(7);
 
         System.out.println("Before: " + queue);
         System.out.println("Sorted: " + queue.getSortedArray());
@@ -148,39 +178,10 @@ public class MedianQueue {
 
         System.out.println("After: " + queue);
 
-        System.out.println(queue.peek());
+        System.out.println("The element in the top: " + queue.peek());
 
+        Iterator<Integer> iterator = queue.iterator();
+        while(iterator.hasNext())
+            System.out.println(iterator.next());
     }
-
-
-
-
-
-
-    /*
-    // Class can fill fields, methods, constructors, logical blocks and inner classes.
-    // You can't create method outside class.
-    // There is a default (package-level) modificator, not private.
-    /* Class without private is friendly (дружній) or private-package (only on this packed).
-    It's not a key word. Only slang.
-    // q
-
-    int field;
-
-    public MedianQueue() {
-    }
-
-    {
-        int x = 5;
-    }
-
-    private class InnerClass {
-    }
-
-
-    public static void main(String[] args) {
-        int x = 6;
-        int y = 3;
-        System.out.println(x / y);
-    }*/
 }

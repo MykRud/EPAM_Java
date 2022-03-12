@@ -28,10 +28,14 @@ public class RangedOpsIntegerSet implements Iterable<Integer>{
     }
 
     public boolean add(int fromInclusive, int toExclusive) {
-        if ((toExclusive - fromInclusive) > (setOfIntegers.length - size))
-            grow();
+        while(true) {
+            if ((toExclusive - fromInclusive) > (setOfIntegers.length - size))
+                grow();
+            else
+                break;
+        }
         int previousSize = size;
-        int i = 0;
+        int i = size;
         for (int j = fromInclusive; j < toExclusive; j++) {
             if(checkForUnique(j)) {
                 setOfIntegers[i++] = j;
@@ -130,6 +134,7 @@ public class RangedOpsIntegerSet implements Iterable<Integer>{
         set.add(13);
         set.add(14);
         set.add(15);
+        System.out.println(set);
         System.out.println(set.remove(60, 70));
 
         Iterator<Integer> iterator = set.iterator();
@@ -139,10 +144,7 @@ public class RangedOpsIntegerSet implements Iterable<Integer>{
             if(current % 2 == 0)
                 iterator.remove();
         }
-
         for(int elem : set)
             System.out.println(elem);
-
-
     }
 }

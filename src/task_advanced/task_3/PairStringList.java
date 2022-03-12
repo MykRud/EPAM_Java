@@ -1,7 +1,5 @@
 package task_advanced.task_3;
 
-import com.sun.xml.xsom.XSUnionSimpleType;
-
 import java.util.*;
 
 public class PairStringList implements Iterable<String>{
@@ -13,8 +11,7 @@ public class PairStringList implements Iterable<String>{
         if(head == null){
             head = newElement;
             head.setNext(new Node(newElement.getValue()));
-            size++;
-            size++;
+            size += 2;
             return;
         }
         Node currentNode = head;
@@ -22,8 +19,7 @@ public class PairStringList implements Iterable<String>{
             currentNode = currentNode.getNext();
         currentNode.setNext(newElement);
         newElement.setNext(new Node(newElement.getValue()));
-        size++;
-        size++;
+        size += 2;
     }
 
     public boolean add(int index, String value){
@@ -42,43 +38,8 @@ public class PairStringList implements Iterable<String>{
         Node tempNode = new Node(nodeToAdd.getValue());
         tempNode.setNext(nextNode);
         nodeToAdd.setNext(tempNode);
-        size++;
-        size++;
+        size += 2;
         return true;
-
-
-
-        /*Node newElement = new Node(value);
-        if(index >= size)
-            return false;
-
-        Node currentNode = head;
-        Node prevNode = head;
-        for(int i = 0; i < index; i++) {
-            prevNode = currentNode;
-            currentNode = currentNode.getNext();
-        }
-        if(index % 2 != 0) {
-            prevNode = prevNode.getNext();
-            currentNode = currentNode.getNext();
-        }
-        if(prevNode == head){
-            Node prevHead = head;
-            head = newElement;
-            Node dublicate = new Node(newElement.getValue());
-            dublicate.setNext(prevHead);
-            newElement.setNext(dublicate);
-            size++;
-            size++;
-            return true;
-        }
-        prevNode.setNext(newElement);
-        Node dublicate = new Node(newElement.getValue());
-        newElement.setNext(dublicate);
-        dublicate.setNext(currentNode.getNext());
-        size++;
-        size++;
-        return true;*/
     }
 
     public boolean remove(String value){
@@ -87,15 +48,13 @@ public class PairStringList implements Iterable<String>{
             if(currentNode.getNext().getValue().equals(value)){
                 if(currentNode == head) {
                     head = currentNode.getNext().getNext();
-                    size--;
-                    size--;
+                    size -= 2;
                     return true;
                 }
                 Node prevNode = currentNode;
                 currentNode = currentNode.getNext();
                 prevNode.setNext(currentNode.getNext().getNext());
-                size--;
-                size--;
+                size -= 2;
                 return true;
             }
             currentNode = currentNode.getNext();
