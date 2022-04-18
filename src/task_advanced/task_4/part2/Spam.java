@@ -22,7 +22,7 @@ public class Spam {
     }
     public void stop(){
         for(int i = 0; i < threads.length; i++){
-            threads[i].interrupt();
+            threads[i].stop();
         }
     }
     private static class Worker extends Thread{
@@ -69,7 +69,7 @@ public class Spam {
                     e.printStackTrace();
                 }
             }
-        });
+        }).start();
             spam.start();
     }
 
