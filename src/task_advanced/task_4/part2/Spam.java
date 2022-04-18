@@ -61,7 +61,7 @@ public class Spam {
             while(true){
                 try {
                     symbol = (char)nis.read();
-                    if(symbol == "\n"){
+                    if(symbol == '\n'){
                         spam.stop();
                         break;
                     }
