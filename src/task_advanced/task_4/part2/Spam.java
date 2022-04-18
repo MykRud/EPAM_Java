@@ -1,6 +1,7 @@
 package task_advanced.task_4.part2;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Spam {
     private Thread[] threads;
@@ -42,7 +43,7 @@ public class Spam {
                     break;
                 }
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -52,12 +53,31 @@ public class Spam {
     }
     public static void main(String[] args) throws IOException {
         String[] messages = new String[] { "@@@", "bbbbbbb" };
-        int[] times = new int[] { 333, 222 };
+        int[] times = new int[] { 3333, 222 };
         Spam spam = new Spam(messages, times);
-        spam.start();
-        char symbol;
-        symbol = (char)System.in.read();
-        if(symbol == '\n')
-            System.out.println("qweqweqwe");
+        new Thread(() -> {
+            NewInputStream nis = new NewInputStream();
+            char symbol;
+            while(true){
+                try {
+                    symbol = (char)nis.read();
+                    if(symbol == "\n"){
+                        spam.stop();
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+            spam.start();
+    }
+
+}
+
+class NewInputStream extends InputStream {
+    @Override
+    public int read() throws IOException {
+        return System.in.read();
     }
 }
