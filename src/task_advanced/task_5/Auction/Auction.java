@@ -1,4 +1,4 @@
-package task_advanced.task_5;
+package task_advanced.task_5.Auction;
 
 import java.util.ArrayList;
 import java.util.List;
