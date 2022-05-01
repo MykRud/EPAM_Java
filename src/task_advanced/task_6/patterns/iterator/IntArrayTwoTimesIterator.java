@@ -1,10 +1,16 @@
 package task_advanced.task_6.patterns.iterator;
 
+import task_advanced.task_6.patterns.IllegalFormatException;
+import task_advanced.task_6.patterns.NotString;
+import task_advanced.task_6.patterns.NotStringHandler;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class IntArrayTwoTimesIterator implements Iterator<Integer> {
+    @NotString
     private int[] array;
+    @NotString
     private int size;
     private int currentPosition;
     private int currentSizeOfSourceArray;
@@ -12,6 +18,12 @@ public class IntArrayTwoTimesIterator implements Iterator<Integer> {
     public IntArrayTwoTimesIterator(int[] array) {
         this.array = array;
         size = array.length * 2;
+        try {
+            NotStringHandler.checkIfItsNotString(array);
+            NotStringHandler.checkIfItsNotString(size);
+        } catch (IllegalFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -32,9 +44,4 @@ public class IntArrayTwoTimesIterator implements Iterator<Integer> {
         return array[currentSizeOfSourceArray++];
     }
 
-    //public static void main(String[] args) {
-      //  IntArrayTwoTimesIterator iter = new IntArrayTwoTimesIterator(new int[]{1, 2, 3});
-        //while(iter.hasNext())
-          //  System.out.println(iter.next());
-    //}
 }

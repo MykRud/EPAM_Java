@@ -8,14 +8,7 @@ public class Decorators {
         List<String> someList = evenIndexElementsSubList(list);
     }
     public static List<String> evenIndexElementsSubList(List<String> sourceList) {
-        /*Iterator<String> iter = sourceList.iterator();
-        int i = 0;
-        while(iter.hasNext()){
-            if( i % 2 != 0 && i != 0)
-                iter.remove();
-            iter.next();
-            i++;
-        }*/
+
         return new AbstractList<>(){
             private List<String> list = new ArrayList<>();
             private int size;
