@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-05-01T20:17:45.325309600Z</date>
+  <millis>1651436265325</millis>
+  <nanos>309600</nanos>
+  <sequence>0</sequence>
+  <logger>MainForLogging</logger>
+  <level>WARNING</level>
+  <class>task_advanced.task_6.patterns.MainForLogging</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Створення PlotFactories</message>
+</record>
+<record>
+  <date>2022-05-01T20:17:45.653481100Z</date>
+  <millis>1651436265653</millis>
+  <nanos>481100</nanos>
+  <sequence>1</sequence>
+  <logger>MainForLogging</logger>
+  <level>WARNING</level>
+  <class>task_advanced.task_6.patterns.MainForLogging</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Створення конкретної фабрики (Classic Disney)</message>
+</record>
+<record>
+  <date>2022-05-01T20:17:45.692457Z</date>
+  <millis>1651436265692</millis>
+  <nanos>457000</nanos>
+  <sequence>2</sequence>
+  <logger>MainForLogging</logger>
+  <level>WARNING</level>
+  <class>task_advanced.task_6.patterns.MainForLogging</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Отримуємо сюжет</message>
+</record>
+<record>
+  <date>2022-05-01T20:17:45.701450300Z</date>
+  <millis>1651436265701</millis>
+  <nanos>450300</nanos>
+  <sequence>3</sequence>
+  <logger>MainForLogging</logger>
+  <level>WARNING</level>
+  <class>task_advanced.task_6.patterns.MainForLogging</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Вивід сюжету на консоль</message>
+</record>
+<record>
+  <date>2022-05-01T20:17:45.856354600Z</date>
+  <millis>1651436265856</millis>
+  <nanos>354600</nanos>
+  <sequence>4</sequence>
+  <logger>MainForLogging</logger>
+  <level>WARNING</level>
+  <class>task_advanced.task_6.patterns.MainForLogging</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Кінець роботи</message>
+</record>
+</log>

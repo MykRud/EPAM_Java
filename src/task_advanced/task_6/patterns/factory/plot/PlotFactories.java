@@ -11,7 +11,7 @@ public class PlotFactories {
     }
 
     public PlotFactory contemporaryDisneyPlotFactory(Character hero, EpicCrisis epicCrisis, Character funnyFriend) {
-       return new ContemporaryDisneyPlotFactory(hero, epicCrisis, funnyFriend);
+        return new ContemporaryDisneyPlotFactory(hero, epicCrisis, funnyFriend);
     }
 
     public PlotFactory marvelPlotFactory(Character[] heroes, EpicCrisis epicCrisis, Character villain) {
