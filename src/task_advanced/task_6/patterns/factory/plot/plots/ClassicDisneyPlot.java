@@ -1,6 +1,5 @@
 package task_advanced.task_6.patterns.factory.plot.plots;
 
-import task_advanced.task_6.patterns.NotNull;
 import task_advanced.task_6.patterns.factory.plot.Character;
 import task_advanced.task_6.patterns.factory.plot.Plot;
 
