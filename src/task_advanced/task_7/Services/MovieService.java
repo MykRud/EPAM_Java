@@ -18,23 +18,39 @@ public class MovieService extends AbstractService<Integer, Movie>{
         return movieDAO.findById(id);
     }
 
+    public List<Movie> findMoviesByCountry(String countryName) throws DAOException {
+        return movieDAO.findMoviesByCountry(countryName);
+    }
+
+    public List<Movie> findMoviesByDateRelease(String dateRelease) throws DAOException{
+        return movieDAO.findMoviesByDateRelease(dateRelease);
+    }
+
+    public List<Movie> findMoviesByActor(String patternName) throws DAOException{
+        return movieDAO.findMoviesByActor(patternName);
+    }
+
+    public List<Movie> findMoviesByName(String name) throws DAOException{
+        return movieDAO.findMoviesByName(name);
+    }
+
     @Override
     public boolean delete(Movie entity) throws DAOException {
-        throw new UnsupportedOperationException();
+        return movieDAO.delete(entity);
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        throw new UnsupportedOperationException();
+        return movieDAO.delete(id);
     }
 
     @Override
-    public Movie add(Movie entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean add(Movie entity) throws DAOException {
+        return movieDAO.create(entity);
     }
 
     @Override
-    public Movie alter(Movie entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean alter(Movie entity) throws DAOException {
+        return movieDAO.update(entity);
     }
 }

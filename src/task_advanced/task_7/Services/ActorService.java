@@ -17,23 +17,35 @@ public class ActorService extends AbstractService<Integer, Actor>{
         return actorDAO.findById(id);
     }
 
+    public List<Actor> findActorsByMovie(String movieName) throws DAOException{
+        return actorDAO.findActorsByMovie(movieName);
+    }
+
+    public List<Actor> findActorsByBirthDate(String birthDate) throws DAOException{
+        return actorDAO.findActorsByBirthDate(birthDate);
+    }
+
+    public List<Actor> findActorByLastName(String name) throws DAOException{
+        return actorDAO.findActorByLastName(name);
+    }
+
     @Override
     public boolean delete(Actor entity) throws DAOException {
-        throw new UnsupportedOperationException();
+        return actorDAO.delete(entity);
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        throw new UnsupportedOperationException();
+        return actorDAO.delete(id);
     }
 
     @Override
-    public Actor add(Actor entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean add(Actor entity) throws DAOException {
+        return actorDAO.create(entity);
     }
 
     @Override
-    public Actor alter(Actor entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean alter(Actor entity) throws DAOException {
+        return actorDAO.update(entity);
     }
 }

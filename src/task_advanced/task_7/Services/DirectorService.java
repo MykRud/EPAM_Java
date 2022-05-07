@@ -2,7 +2,6 @@ package task_advanced.task_7.Services;
 
 import task_advanced.task_7.DAOs.DAOException;
 import task_advanced.task_7.Entities.Director;
-import task_advanced.task_7.Entities.Entity;
 
 import java.util.List;
 
@@ -17,23 +16,36 @@ public class DirectorService extends AbstractService<Integer, Director>{
         return directorDAO.findById(id);
     }
 
+    public List<Director> findDirectorsByLastName(String name) throws DAOException{
+        return directorDAO.findDirectorsByLastName(name);
+    }
+
+    public List<Director> findDirectorsByBirthDate(String birthDate) throws DAOException{
+        return directorDAO.findDirectorsByBirthDate(birthDate);
+    }
+
+    public Director findDirectorOfMovie(String movieName) throws DAOException{
+        return directorDAO.findDirectorOfMovie(movieName);
+
+    }
+
     @Override
     public boolean delete(Director entity) throws DAOException {
-        throw new UnsupportedOperationException();
+        return directorDAO.delete(entity);
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        throw new UnsupportedOperationException();
+        return directorDAO.delete(id);
     }
 
     @Override
-    public Director add(Director entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean add(Director entity) throws DAOException {
+        return directorDAO.create(entity);
     }
 
     @Override
-    public Director alter(Director entity) throws DAOException {
-        throw new UnsupportedOperationException();
+    public boolean alter(Director entity) throws DAOException {
+        return directorDAO.update(entity);
     }
 }

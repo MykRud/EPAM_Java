@@ -1,5 +1,8 @@
 package task_advanced.task_7.Entities;
 
+import task_advanced.task_7.DAOs.DAOException;
+import task_advanced.task_7.Services.DirectorService;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +13,18 @@ public class Movie extends Entity{
     private List<Actor> actorList = new ArrayList<>();
     private Date releaseDate;
     private String country;
-    private String director;
+    private String directorName;
 
     public  Movie(){
     }
 
-    public Movie(int id, String name, Date releaseDate, String country, String director, List<Actor> actorList) {
+    public Movie(int id, String name, Date releaseDate, String country, String directorName, List<Actor> actorList) {
         this.id = id;
         this.name = name;
         this.actorList = actorList;
         this.releaseDate = releaseDate;
         this.country = country;
-        this.director = director;
+        this.directorName = directorName;
     }
 
     public void setId(int id) {
@@ -44,8 +47,8 @@ public class Movie extends Entity{
         this.country = country;
     }
 
-    public void setDirector(String director) {
-        this.director = director;
+    public void setDirectorName(String directorName) {
+        this.directorName = directorName;
     }
 
     public int getId() {
@@ -68,15 +71,26 @@ public class Movie extends Entity{
         return country;
     }
 
-    public String getDirector() {
+    public Director getDirector() {
+        Director director = null;
+        try {
+            DirectorService directorService = new DirectorService();
+            director = directorService.findDirectorsByLastName(directorName).get(0);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         return director;
+    }
+
+    public String getDirectorName(){
+        return directorName;
     }
 
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder("[ ");
         sb.append(id).append(", ").append(name).append(", ").append(releaseDate.toString())
-                .append(", ").append(country).append(", ").append(director).append(", ").append(actorList.toString())
+                .append(", ").append(country).append(", ").append(directorName).append(", ").append(actorList.toString())
                 .append(" }");
         return sb.toString();
     }

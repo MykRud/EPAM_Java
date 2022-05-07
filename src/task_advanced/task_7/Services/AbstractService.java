@@ -21,8 +21,8 @@ public abstract class AbstractService<K, L extends Entity> {
 
     public abstract boolean delete(K id) throws DAOException;
 
-    public abstract L add(L entity) throws DAOException;
+    public abstract boolean add(L entity) throws DAOException;
 
-    public abstract L alter(L entity) throws DAOException;
+    public abstract boolean alter(L entity) throws DAOException;
 
 }

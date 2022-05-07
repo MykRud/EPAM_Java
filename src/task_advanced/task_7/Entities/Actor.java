@@ -49,6 +49,9 @@ public class Actor extends Entity{
 
     @Override
     public String toString(){
-        return lastName;
+        StringBuilder sb = new StringBuilder("{ ");
+        sb.append(id).append(", ").append(firstName).append(", ").append(lastName)
+                .append(", ").append(birthDate).append(" }");
+        return sb.toString();
     }
 }

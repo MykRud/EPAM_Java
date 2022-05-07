@@ -1,15 +1,18 @@
 package task_advanced.task_7.DAOs;
 
 import task_advanced.task_7.Entities.Actor;
+import task_advanced.task_7.Entities.Director;
 import task_advanced.task_7.Entities.Movie;
-import task_advanced.task_7.OutOfDateClasses.ConnectionCreator;
 
 import java.sql.*;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MovieDAO extends DAO<Integer, Movie>{
 
+    private boolean isConnected = false;
     private static final String SQL_SELECT_ALL_MOVIES =
             "SELECT movie_id, name, release_date, country, lastname AS director " +
                     "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id";
@@ -20,6 +23,10 @@ public class MovieDAO extends DAO<Integer, Movie>{
             "SELECT movie_id FROM ActorsInMovies WHERE actor_id=(SELECT actor_id FROM Actor WHERE lastname=?)";
     private static final String SQL_SELECT_MOVIES_BY_ID = "SELECT movie_id, name, release_date, country, lastname AS director " +
             "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.movie_id=?";
+    private static final String SQL_SELECT_MOVIES_BY_RELEASE_DATE = "SELECT movie_id, name, release_date, country, lastname AS director " +
+            "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.release_date=?";
+    private static final String SQL_SELECT_MOVIES_BY_COUNTRY = "SELECT movie_id, name, release_date, country, lastname AS director " +
+            "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.country=?";
 
     public List<Movie> findMoviesByName(String name) throws DAOException{
         transaction.init(this);
@@ -53,17 +60,48 @@ public class MovieDAO extends DAO<Integer, Movie>{
             throw new DAOException(e);
         } finally {
             close(statement);
-            getTransaction().end();
+            getTransaction().end(this);
         }
         return movieList;
     }
 
-    public List<Movie> findMoviesByDateRelease(Date dateRelease) throws DAOException{
-        throw new UnsupportedOperationException();
+    public List<Movie> findMoviesByDateRelease(String dateRelease) throws DAOException{
+        if(!dateRelease.matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$"))
+            return Collections.emptyList();
+        transaction.init(this);
+        List<Movie> listOfMovies = new ArrayList<>();
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(SQL_SELECT_MOVIES_BY_RELEASE_DATE);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(dateRelease);
+            Date date = new Date(utilDate.getTime());
+            statement.setDate(1, date);
+            ResultSet resultSet = statement.executeQuery();
+            listOfMovies = fillArray(resultSet);
+        } catch (SQLException | ParseException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+        }
+        return listOfMovies;
     }
 
     public List<Movie> findMoviesByCountry(String country) throws DAOException{
-        throw new UnsupportedOperationException();
+        transaction.init(this);
+        List<Movie> listOfMovies = new ArrayList<>();
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(SQL_SELECT_MOVIES_BY_COUNTRY);
+            statement.setString(1, country);
+            ResultSet resultSet = statement.executeQuery();
+            listOfMovies = fillArray(resultSet);
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+        }
+        return listOfMovies;
     }
 
     private List<Movie> fillArray(ResultSet resultSet) throws DAOException{
@@ -72,11 +110,10 @@ public class MovieDAO extends DAO<Integer, Movie>{
             while(resultSet.next()) {
                 int movieId = resultSet.getInt("movie_id");
                 String name = resultSet.getString("name");
-                getTransaction().init(actorDAO);
-                List<Actor> listOfActors = actorDAO.findActorsByMovie(name);
                 Date releaseDate = resultSet.getDate("release_date");
                 String country = resultSet.getString("country");
                 String director = resultSet.getString("director");
+                List<Actor> listOfActors = actorDAO.findActorsByMovie(name);
                 movieList.add(new Movie(movieId, name, releaseDate, country, director, listOfActors));
             }
         } catch (SQLException e){
@@ -97,7 +134,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
-            getTransaction().end();
+            getTransaction().end(this);
             close(statement);
         }
         return listOfMovies;
@@ -105,7 +142,8 @@ public class MovieDAO extends DAO<Integer, Movie>{
 
     @Override
     public Movie findById(Integer id) throws DAOException {
-        getTransaction().init(this);
+        if(!isConnected)
+            getTransaction().init(this);
         List<Movie> listOfMovies = new ArrayList<>();
         PreparedStatement statement = null;
         try{
@@ -116,7 +154,8 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
-            getTransaction().end();
+            if(!isConnected)
+                getTransaction().end(this);
         }
         if(listOfMovies.isEmpty())
             return null;
@@ -124,22 +163,142 @@ public class MovieDAO extends DAO<Integer, Movie>{
     }
 
     @Override
+    public boolean isConnected(){
+        return isConnected;
+    }
+
+    @Override
+    public void setIfConnected(boolean isConnected){
+        this.isConnected = isConnected;
+    }
+
+    private static final String ON_FOREIGN_KEY = "SET foreign_key_checks = 1";
+    private static final String OFF_FOREIGN_KEY = "SET foreign_key_checks = 0";
+    private static final String SQL_DELETE_MOVIE_BY_ID =
+            "DELETE FROM Movie WHERE movie_id=?";
+    private static final String SQL_DELETE_ACTORS_FROM_MOVIE =
+            "DELETE FROM ActorsInMovies WHERE movie_id=?";
+
+    @Override
     public boolean delete(Movie entity) throws DAOException {
-        return false;
+        if(!isConnected)
+            transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_DELETE_MOVIE_BY_ID);
+            statement.setInt(1, entity.getId());
+            updatedRecords = statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
+            statement = connection.prepareStatement(SQL_DELETE_ACTORS_FROM_MOVIE);
+            statement.setInt(1, entity.getId());
+            statement.executeUpdate();
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        return false;
+        if(!isConnected)
+            transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_DELETE_MOVIE_BY_ID);
+            statement.setInt(1, id);
+            updatedRecords = statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
+            statement = connection.prepareStatement(SQL_DELETE_ACTORS_FROM_MOVIE);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
     }
 
-    @Override
-    public Movie create(Movie entity) throws DAOException {
-        return null;
-    }
+    private static final String SQL_INSERT_MOVIE = "INSERT INTO Movie(" +
+            "movie_id, name, release_date, country, director_id)" +
+            "VALUES(?, ?, ?, ?, ?)";
 
     @Override
-    public Movie update(Movie entity) throws DAOException {
-        return null;
+    public boolean create(Movie entity) throws DAOException {
+        if(!isConnected)
+            transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_INSERT_MOVIE);
+            statement.setInt(1, entity.getId());
+            statement.setString(2, entity.getName());
+            statement.setDate(3, entity.getReleaseDate());
+            statement.setString(4, entity.getCountry());
+            List<Director> director = directorDAO.findDirectorsByLastName(entity.getDirectorName());
+            statement.setInt(5, director.get(0).getId());
+            updatedRecords = statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
+    }
+
+    private static final String SQL_UPDATE_MOVIE =
+            "UPDATE Movie SET name=?, release_date=?, country=?, director_id=? WHERE movie_id=?";
+
+    @Override
+    public boolean update(Movie entity) throws DAOException {
+        if(!isConnected)
+            transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_UPDATE_MOVIE);
+            statement.setString(1, entity.getName());
+            statement.setDate(2, entity.getReleaseDate());
+            statement.setString(3, entity.getCountry());
+            List<Director> director = directorDAO.findDirectorsByLastName(entity.getDirectorName());
+            statement.setInt(4, director.get(0).getId());
+            statement.setInt(5, entity.getId());
+            updatedRecords = statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
     }
 }

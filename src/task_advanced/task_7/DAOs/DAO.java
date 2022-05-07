@@ -30,9 +30,13 @@ public abstract class DAO<K, L extends Entity> {
 
     public abstract boolean delete(K id) throws DAOException;
 
-    public abstract L create(L entity) throws DAOException;
+    public abstract boolean create(L entity) throws DAOException;
 
-    public abstract L update(L entity) throws DAOException;
+    public abstract boolean update(L entity) throws DAOException;
+
+    public abstract boolean isConnected();
+
+    public abstract void setIfConnected(boolean isConnected);
 
     public void close(Statement statement){
         try{

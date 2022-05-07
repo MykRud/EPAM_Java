@@ -46,9 +46,10 @@ public class EntityTransaction {
             throw new DAOException(e);
         }
         dao.setConnection(connection);
+        dao.setIfConnected(true);
     }
 
-    public void end() throws DAOException{
+    public void end(DAO dao) throws DAOException{
         if(connection != null){
             try {
                 connection.close();
@@ -57,6 +58,7 @@ public class EntityTransaction {
             }
         }
         connection = null;
+        dao.setIfConnected(false);
     }
 
     public void commit() throws DAOException{
@@ -78,4 +80,5 @@ public class EntityTransaction {
             throw new DAOException(e);
         }
     }
+
 }
