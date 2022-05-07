@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Movie extends Entity{
+    private static int numberOfMovies = 0;
     private int id;
     private String name;
     private List<Actor> actorList = new ArrayList<>();
@@ -15,7 +16,14 @@ public class Movie extends Entity{
     private String country;
     private String directorName;
 
-    public  Movie(){
+    public Movie(String name, Date releaseDate, String country, String directorName, List<Actor> actorList) {
+        this.id = numberOfMovies + 1;
+        this.name = name;
+        this.actorList = actorList;
+        this.releaseDate = releaseDate;
+        this.country = country;
+        this.directorName = directorName;
+        numberOfMovies++;
     }
 
     public Movie(int id, String name, Date releaseDate, String country, String directorName, List<Actor> actorList) {
@@ -25,6 +33,11 @@ public class Movie extends Entity{
         this.releaseDate = releaseDate;
         this.country = country;
         this.directorName = directorName;
+    }
+
+    public static void setNumberOfMovies(int nom) {
+        numberOfMovies = nom;
+        numberOfMovies++;
     }
 
     public void setId(int id) {
@@ -49,6 +62,10 @@ public class Movie extends Entity{
 
     public void setDirectorName(String directorName) {
         this.directorName = directorName;
+    }
+
+    public void addActor(Actor actor){
+        actorList.add(actor);
     }
 
     public int getId() {

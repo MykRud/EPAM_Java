@@ -2,6 +2,7 @@ package task_advanced.task_7.Services;
 
 import task_advanced.task_7.DAOs.ActorDAO;
 import task_advanced.task_7.DAOs.DAOException;
+import task_advanced.task_7.Entities.Actor;
 import task_advanced.task_7.Entities.Entity;
 import task_advanced.task_7.Entities.Movie;
 
@@ -52,5 +53,12 @@ public class MovieService extends AbstractService<Integer, Movie>{
     @Override
     public boolean alter(Movie entity) throws DAOException {
         return movieDAO.update(entity);
+    }
+
+    public boolean addActorToMovie(Movie movie, Actor actor) throws DAOException {
+        boolean isAdded = movieDAO.addActorToMovie(movie, actor);
+        if(isAdded)
+            movie.addActor(actor);
+        return isAdded;
     }
 }

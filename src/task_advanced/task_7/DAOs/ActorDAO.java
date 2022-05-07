@@ -19,6 +19,35 @@ public class ActorDAO extends DAO<Integer, Actor> {
     private static final String SQL_SELECT_ACTORS_FROM_MOVIE =
             "SELECT ac.* FROM Actor ac, ActorsInMovies aim WHERE aim.actor_id=ac.actor_id " +
                     "AND aim.movie_id=(SELECT movie_id FROM Movie WHERE name=?)";
+    private static final String SQL_GET_NUMBER_OF_ACTORS =
+            "SELECT COUNT(*) FROM Actor";
+
+    public ActorDAO(){
+        try {
+            Actor.setNumberOfActors(findNumberOfRecords());
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int findNumberOfRecords() throws DAOException {
+        int numberOfActors = 0;
+        Statement statement = null;
+        transaction.init(this);
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL_GET_NUMBER_OF_ACTORS);
+            resultSet.next();
+            numberOfActors = resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return numberOfActors;
+    }
+
 
     public List<Actor> findActorByLastName(String name) throws DAOException{
         transaction.init(this);
@@ -61,6 +90,7 @@ public class ActorDAO extends DAO<Integer, Actor> {
         return listOfActors;
     }
 
+    // 2: Вивести усю інформацію про актерів, за знімалися у фільмі
     public List<Actor> findActorsByMovie(String movieName) throws DAOException{
         if(!isConnected)
             transaction.init(this);
@@ -114,8 +144,11 @@ public class ActorDAO extends DAO<Integer, Actor> {
             e.printStackTrace();
         } finally {
             close(statement);
-            transaction.end(this);
+            if(!movieDAO.isConnected())
+                transaction.end(this);
         }
+        if(listOfActors.isEmpty())
+            return null;
         return listOfActors.get(0);
     }
 
@@ -158,8 +191,11 @@ public class ActorDAO extends DAO<Integer, Actor> {
             statement = connection.prepareStatement(SQL_DELETE_ACTOR_BY_ID);
             statement.setInt(1, entity.getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if(updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_DELETE_ACTOR_FROM_MOVIE);
             statement.setInt(1, entity.getId());
             statement.executeUpdate();
@@ -186,8 +222,11 @@ public class ActorDAO extends DAO<Integer, Actor> {
             statement = connection.prepareStatement(SQL_DELETE_ACTOR_BY_ID);
             statement.setInt(1, id);
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if(updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_DELETE_ACTOR_FROM_MOVIE);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -208,8 +247,7 @@ public class ActorDAO extends DAO<Integer, Actor> {
 
     @Override
     public boolean create(Actor entity) throws DAOException {
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         PreparedStatement statement = null;
         int updatedRecords = 0;
         try {
@@ -221,10 +259,10 @@ public class ActorDAO extends DAO<Integer, Actor> {
             statement.setString(3, entity.getLastName());
             statement.setDate(4, entity.getBirthDate());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
-                return false;
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
@@ -254,10 +292,10 @@ public class ActorDAO extends DAO<Integer, Actor> {
             statement.setDate(3, entity.getBirthDate());
             statement.setInt(4, entity.getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
-                return false;
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
@@ -265,5 +303,58 @@ public class ActorDAO extends DAO<Integer, Actor> {
             transaction.end(this);
         }
         return updatedRecords > 0;
+    }
+
+    // 3: Вивести усю інформацію про актерів, за знімалися як мінімум у N фільмах
+    private static final String SQL_FIND_ACTORS_THAT_ACT_AT_LEAST_IN_N_MOVES =
+            "SELECT ac.* FROM Actor ac, ActorsInMovies aim " +
+                    "WHERE ac.actor_id=aim.actor_id GROUP BY aim.actor_id HAVING count(*) > ?";
+
+    public List<Actor> findActorsThatActAtLeastInNMovies(Integer n) throws DAOException {
+        transaction.init(this);
+        List<Actor> listOfActors = new ArrayList<>();
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(SQL_FIND_ACTORS_THAT_ACT_AT_LEAST_IN_N_MOVES);
+            statement.setInt(1, n);
+            ResultSet resultSetOfActors = statement.executeQuery();
+            listOfActors = fillArray(resultSetOfActors);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(statement);
+            if(!movieDAO.isConnected())
+                transaction.end(this);
+        }
+        if(listOfActors.isEmpty())
+            return null;
+        return listOfActors;
+    }
+
+    // 4: Вивести інформацію про акторів, які бути режисерами хоча би одного із фільмів
+    private static final String SQL_FIND_ACTORS_THAT_ARE_DIRECTORS_IN_AT_LEAST_ONE_MOVIE =
+            "SELECT ac.* FROM Movie mov, Actor ac, Director dir " +
+                    "WHERE mov.director_id=dir.director_id " +
+                    "AND dir.lastname=ac.lastname";
+
+    public List<Actor> findActorsThatAreDirectorsInAtLeastOneMovie() throws DAOException {
+        transaction.init(this);
+        List<Actor> listOfActors = new ArrayList<>();
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSetOfActors = statement.executeQuery(SQL_FIND_ACTORS_THAT_ARE_DIRECTORS_IN_AT_LEAST_ONE_MOVIE);
+            listOfActors = fillArray(resultSetOfActors);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(statement);
+            if(!movieDAO.isConnected())
+                transaction.end(this);
+        }
+        if(listOfActors.isEmpty())
+            return null;
+        return listOfActors;
     }
 }

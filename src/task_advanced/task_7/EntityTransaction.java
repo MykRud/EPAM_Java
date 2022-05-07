@@ -2,7 +2,7 @@ package task_advanced.task_7;
 
 import task_advanced.task_7.DAOs.DAO;
 import task_advanced.task_7.DAOs.DAOException;
-import task_advanced.task_7.OutOfDateClasses.ConnectionCreator;
+import task_advanced.task_7.ConnectionCreator;
 
 import java.sql.Connection;
 import java.sql.SQLException;

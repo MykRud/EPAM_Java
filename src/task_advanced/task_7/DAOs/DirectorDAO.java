@@ -20,6 +20,34 @@ public class DirectorDAO extends DAO<Integer, Director> {
     private static final String SQL_SELECT_DIRECTORS_BY_BIRTH_DATE = "SELECT * FROM Director WHERE birth_date=?";
     private static final String SQL_SELECT_DIRECTOR_OF_MOVIE =
             "SELECT dir.* FROM Director dir, Movie mov WHERE dir.director_id=mov.director_id AND mov.name=?";
+    private static final String SQL_GET_NUMBER_OF_DIRECTORS =
+            "SELECT COUNT(*) FROM Director";
+
+    public DirectorDAO(){
+        try {
+            Director.setNumberOfDirectors(findNumberOfRecords());
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int findNumberOfRecords() throws DAOException {
+        int numberOfDirectors = 0;
+        Statement statement = null;
+        transaction.init(this);
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL_GET_NUMBER_OF_DIRECTORS);
+            resultSet.next();
+            numberOfDirectors = resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return numberOfDirectors;
+    }
 
     @Override
     public List<Director> findAll() throws DAOException {
@@ -75,7 +103,7 @@ public class DirectorDAO extends DAO<Integer, Director> {
             e.printStackTrace();
         } finally {
             close(statement);
-            if(movieDAO.isConnected())
+            if(!movieDAO.isConnected())
                 transaction.end(this);
         }
         return listOfDirectors;
@@ -167,8 +195,11 @@ public class DirectorDAO extends DAO<Integer, Director> {
             statement = connection.prepareStatement(SQL_DELETE_DIRECTOR_BY_ID);
             statement.setInt(1, entity.getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if(updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_UPDATE_MOVIE_DIRECTOR);
             statement.setInt(1, entity.getId());
             statement.executeUpdate();
@@ -195,8 +226,11 @@ public class DirectorDAO extends DAO<Integer, Director> {
             statement = connection.prepareStatement(SQL_DELETE_DIRECTOR_BY_ID);
             statement.setInt(1, id);
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if (updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_UPDATE_MOVIE_DIRECTOR);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -230,10 +264,10 @@ public class DirectorDAO extends DAO<Integer, Director> {
             statement.setString(3, entity.getLastName());
             statement.setDate(4, entity.getBirthDate());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
-                return false;
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
@@ -261,10 +295,10 @@ public class DirectorDAO extends DAO<Integer, Director> {
             statement.setDate(3, entity.getBirthDate());
             statement.setInt(4, entity.getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
-                return false;
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {

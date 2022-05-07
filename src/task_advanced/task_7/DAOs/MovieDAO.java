@@ -27,6 +27,34 @@ public class MovieDAO extends DAO<Integer, Movie>{
             "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.release_date=?";
     private static final String SQL_SELECT_MOVIES_BY_COUNTRY = "SELECT movie_id, name, release_date, country, lastname AS director " +
             "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.country=?";
+    private static final String SQL_GET_NUMBER_OF_MOVIES =
+            "SELECT COUNT(*) FROM Movie";
+
+    public MovieDAO(){
+        try {
+            Movie.setNumberOfMovies(findNumberOfRecords());
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int findNumberOfRecords() throws DAOException {
+        int numberOfMovies = 0;
+        Statement statement = null;
+        transaction.init(this);
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL_GET_NUMBER_OF_MOVIES);
+            resultSet.next();
+            numberOfMovies = resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return numberOfMovies;
+    }
 
     public List<Movie> findMoviesByName(String name) throws DAOException{
         transaction.init(this);
@@ -46,7 +74,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
     }
 
     public List<Movie> findMoviesByActor(String patternName) throws DAOException{
-        getTransaction().init(this);
+        transaction.init(this);
         List<Movie> movieList = new ArrayList<>();
         PreparedStatement statement = null;
         try{
@@ -60,7 +88,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
             throw new DAOException(e);
         } finally {
             close(statement);
-            getTransaction().end(this);
+            transaction.end(this);
         }
         return movieList;
     }
@@ -124,7 +152,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
 
     @Override
     public List<Movie> findAll() throws DAOException {
-        getTransaction().init(this);
+        transaction.init(this);
         Statement statement = null;
         List<Movie> listOfMovies;
         try{
@@ -134,7 +162,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
-            getTransaction().end(this);
+            transaction.end(this);
             close(statement);
         }
         return listOfMovies;
@@ -143,7 +171,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
     @Override
     public Movie findById(Integer id) throws DAOException {
         if(!isConnected)
-            getTransaction().init(this);
+            transaction.init(this);
         List<Movie> listOfMovies = new ArrayList<>();
         PreparedStatement statement = null;
         try{
@@ -155,7 +183,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
             throw new DAOException(e);
         } finally {
             if(!isConnected)
-                getTransaction().end(this);
+                transaction.end(this);
         }
         if(listOfMovies.isEmpty())
             return null;
@@ -191,8 +219,11 @@ public class MovieDAO extends DAO<Integer, Movie>{
             statement = connection.prepareStatement(SQL_DELETE_MOVIE_BY_ID);
             statement.setInt(1, entity.getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if(updatedRecords == 0){
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_DELETE_ACTORS_FROM_MOVIE);
             statement.setInt(1, entity.getId());
             statement.executeUpdate();
@@ -219,8 +250,11 @@ public class MovieDAO extends DAO<Integer, Movie>{
             statement = connection.prepareStatement(SQL_DELETE_MOVIE_BY_ID);
             statement.setInt(1, id);
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
+            if(updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
                 return false;
+            }
             statement = connection.prepareStatement(SQL_DELETE_ACTORS_FROM_MOVIE);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -256,10 +290,10 @@ public class MovieDAO extends DAO<Integer, Movie>{
             List<Director> director = directorDAO.findDirectorsByLastName(entity.getDirectorName());
             statement.setInt(5, director.get(0).getId());
             updatedRecords = statement.executeUpdate();
-            if(updatedRecords == 0)
-                return false;
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
@@ -289,8 +323,103 @@ public class MovieDAO extends DAO<Integer, Movie>{
             statement.setInt(4, director.get(0).getId());
             statement.setInt(5, entity.getId());
             updatedRecords = statement.executeUpdate();
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
             if(updatedRecords == 0)
                 return false;
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
+    }
+
+    private static final String SQL_ADD_ACTOR_TO_MOVIE =
+            "INSERT INTO ActorsInMovies(movie_id, actor_id)" +
+                    "VALUES(?, ?)";
+
+    public boolean addActorToMovie(Movie movie, Actor actor) throws DAOException{
+        transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_ADD_ACTOR_TO_MOVIE);
+            if(actorDAO.findById(actor.getId()) == null)
+                actorDAO.create(actor);
+            statement.setInt(1, movie.getId());
+            statement.setInt(2, actor.getId());
+            updatedRecords = statement.executeUpdate();
+            statement = connection.prepareStatement(ON_FOREIGN_KEY);
+            statement.executeUpdate();
+            if(updatedRecords == 0)
+                return false;
+        } catch (SQLException e){
+            throw new DAOException(e);
+        } finally {
+            close(statement);
+            transaction.end(this);
+        }
+        return updatedRecords > 0;
+    }
+
+    private static final String SQL_FIND_MOVIES_WITH_INTERVAL_LESS =
+            "SELECT * FROM Movie WHERE release_date>DATE_SUB(NOW(), INTERVAL ? YEAR)";
+    private static final String SQL_FIND_MOVIES_WITH_INTERVAL_GREATER =
+            "SELECT * FROM Movie WHERE release_date<DATE_SUB(NOW(), INTERVAL ? YEAR)";
+
+
+    // 1: Знайти всі фільми, що вийшли на екран у теперішньому та попередньому роках
+    public List<Movie> findThisYearAndPreviousYearMovies() throws DAOException {
+        if(!isConnected)
+            transaction.init(this);
+        List<Movie> listOfMovies = new ArrayList<>();
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(SQL_FIND_MOVIES_WITH_INTERVAL_LESS);
+            statement.setInt(1, 2);
+            ResultSet resultSet = statement.executeQuery();
+            listOfMovies = fillArray(resultSet);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            if(!isConnected)
+                transaction.end(this);
+        }
+        if(listOfMovies.isEmpty())
+            return Collections.emptyList();
+        return listOfMovies;
+    }
+
+    private static final String SQL_DELETE_MOVIES_WITH_INTERVAL_GREATER =
+            "DELETE FROM Movie WHERE release_date<DATE_SUB(NOW(), INTERVAL ? YEAR)";
+
+    private static final String SQL_DELETE_RELATIONSHIP_BETWEEN_MOVIES_AND_ACTORS =
+        "DELETE FROM ActorsInMovies WHERE NOT EXISTS( " +
+                "SELECT * FROM Movie AS T1 WHERE T1.movie_id=ActorsInMovies.movie_id )";
+
+    // 5: Видалити усі фільми, дата виходу яких є більшою за певну кількісті років
+    public boolean deleteMoviesThatHaveReleaseDateGreaterThanN(int n) throws DAOException {
+        if(!isConnected)
+            transaction.init(this);
+        PreparedStatement statement = null;
+        int updatedRecords = 0;
+        try {
+            statement = connection.prepareStatement(OFF_FOREIGN_KEY);
+            statement.executeUpdate();
+            statement = connection.prepareStatement(SQL_DELETE_MOVIES_WITH_INTERVAL_GREATER);
+            statement.setInt(1, n);
+            updatedRecords = statement.executeUpdate();
+            if(updatedRecords == 0) {
+                statement = connection.prepareStatement(ON_FOREIGN_KEY);
+                statement.executeUpdate();
+                return false;
+            }
+            statement = connection.prepareStatement(SQL_DELETE_RELATIONSHIP_BETWEEN_MOVIES_AND_ACTORS);
+            statement.executeUpdate();
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
             statement.executeUpdate();
         } catch (SQLException e){

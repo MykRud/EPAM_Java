@@ -3,16 +3,30 @@ package task_advanced.task_7.Entities;
 import java.sql.Date;
 
 public class Director extends Entity{
+    private static int numberOfDirectors = 0;
     private int id;
     private String firstName;
     private String lastName;
     private Date birthDate;
+
+    public Director(String firstName, String lastName, Date birthDate) {
+        this.id = numberOfDirectors + 1;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        numberOfDirectors++;
+    }
 
     public Director(int id, String firstName, String lastName, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
+    }
+
+    public static void setNumberOfDirectors(int nod) {
+        numberOfDirectors = nod;
+        numberOfDirectors++;
     }
 
     public int getId() {

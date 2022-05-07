@@ -1,4 +1,4 @@
-package task_advanced.task_7.OutOfDateClasses;
+package task_advanced.task_7;
 
 import java.io.FileReader;
 import java.io.IOException;

@@ -10,17 +10,11 @@ import java.util.List;
 
 public abstract class DAO<K, L extends Entity> {
     protected Connection connection;
+    public static final EntityTransaction transaction = new EntityTransaction();
     public static final ActorDAO actorDAO = new ActorDAO();
     public static final MovieDAO movieDAO = new MovieDAO();
     public static final DirectorDAO directorDAO = new DirectorDAO();
 
-
-
-    protected static final EntityTransaction transaction = new EntityTransaction();
-
-    public static EntityTransaction getTransaction() {
-        return transaction;
-    }
 
     public abstract List<L> findAll() throws DAOException;
 

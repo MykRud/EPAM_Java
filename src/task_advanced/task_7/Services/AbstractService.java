@@ -9,9 +9,9 @@ import java.util.List;
 
 public abstract class AbstractService<K, L extends Entity> {
     public static final EntityTransaction transaction = new EntityTransaction();
-    public static final ActorDAO actorDAO = new ActorDAO();
-    public static final  MovieDAO movieDAO = new MovieDAO();
-    public static final  DirectorDAO directorDAO = new DirectorDAO();
+    public static final ActorDAO actorDAO = DAO.actorDAO;
+    public static final  MovieDAO movieDAO = DAO.movieDAO;
+    public static final  DirectorDAO directorDAO = DAO.directorDAO;
 
     public abstract List<L> findAll() throws DAOException;
 

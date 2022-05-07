@@ -3,16 +3,30 @@ package task_advanced.task_7.Entities;
 import java.sql.Date;
 
 public class Actor extends Entity{
+    private static int numberOfActors = 0;
     private int id;
     private String firstName;
     private String lastName;
     private Date birthDate;
+
+    public Actor(String firstName, String lastName, Date birthDate) {
+        this.id = numberOfActors + 1;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        numberOfActors++;
+    }
 
     public Actor(int id, String firstName, String lastName, Date birthDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
+    }
+
+    public static void setNumberOfActors(int noa){
+        numberOfActors = noa;
+        numberOfActors++;
     }
 
     public int getId() {
