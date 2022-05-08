@@ -1,8 +1,10 @@
 package task_advanced.task_7.Menus;
 
 import task_advanced.task_7.DAOs.DAOException;
+import task_advanced.task_7.Entities.Actor;
 import task_advanced.task_7.Entities.Entity;
 import task_advanced.task_7.Entities.Movie;
+import task_advanced.task_7.Services.ActorService;
 import task_advanced.task_7.Services.MovieService;
 
 import java.sql.Date;
@@ -45,10 +47,12 @@ public class MovieMenu implements Menu{
                 "9 - Видалити фільм",
                 "10 - Знайти всі фільми, що вийшли на екран у теперішньому та попередньому роках",
                 "11 - Видалити усі фільми, дата виходу яких є більшою за певну кількісті років",
-                "12 - Вихід",
+                "12 - Додати актора у список акторів деякого фільму",
+                "13 - Назад",
+                "14 - Вихід",
         };
         int option = 0;
-        while (option != 12){
+        while (option != 13){
             printMenu(options);
             try {
                 option = Integer.parseInt(scanner.nextLine());
@@ -123,7 +127,23 @@ public class MovieMenu implements Menu{
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 12: exit(0);
+                    case 12:
+                        System.out.println("Введіть назву фільму: ");
+                        String movName = scanner.nextLine();
+                        List<Movie> movieList = movieService.findMoviesByName(movName);
+                        if(movieList.isEmpty())
+                            throw new DAOException("Фільм не був знайдений");
+                        System.out.println("Введіть прізвище актора (він повинен бути присутній у базі даних): ");
+                        String actorName = scanner.nextLine();
+                        ActorService actorService = new ActorService();
+                        List<Actor> actorList = actorService.findActorByLastName(actorName);
+                        if(actorList.isEmpty())
+                            throw new DAOException("Актор не знайдений");
+                        System.out.println(movieService.addActorToMovie(movieList.get(0), actorList.get(0)));
+                        System.out.println("Натисніть Enter щоб продовжити...");
+                        scanner.nextLine();
+                        break;
+                    case 14: exit(0);
                 }
             }
             catch (Exception ex){

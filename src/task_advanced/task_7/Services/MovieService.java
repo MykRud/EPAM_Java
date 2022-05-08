@@ -1,9 +1,8 @@
 package task_advanced.task_7.Services;
 
-import task_advanced.task_7.DAOs.ActorDAO;
 import task_advanced.task_7.DAOs.DAOException;
 import task_advanced.task_7.Entities.Actor;
-import task_advanced.task_7.Entities.Entity;
+import task_advanced.task_7.Entities.Director;
 import task_advanced.task_7.Entities.Movie;
 
 import java.util.List;
@@ -37,12 +36,18 @@ public class MovieService extends AbstractService<Integer, Movie>{
 
     @Override
     public boolean delete(Movie entity) throws DAOException {
-        return movieDAO.delete(entity);
+        boolean isDeleted = movieDAO.delete(entity);
+        if(isDeleted)
+            Director.decreaseNumberOfDirector();
+        return isDeleted;
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        return movieDAO.delete(id);
+        boolean isDeleted = movieDAO.delete(id);
+        if(isDeleted)
+            Director.decreaseNumberOfDirector();
+        return isDeleted;
     }
 
     @Override

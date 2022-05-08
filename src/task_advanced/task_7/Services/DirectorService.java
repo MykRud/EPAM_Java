@@ -31,12 +31,18 @@ public class DirectorService extends AbstractService<Integer, Director>{
 
     @Override
     public boolean delete(Director entity) throws DAOException {
-        return directorDAO.delete(entity);
+        boolean isDeleted = directorDAO.delete(entity);
+        if(isDeleted)
+            Director.decreaseNumberOfDirector();
+        return isDeleted;
     }
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        return directorDAO.delete(id);
+        boolean isDeleted = directorDAO.delete(id);
+        if(isDeleted)
+            Director.decreaseNumberOfDirector();
+        return isDeleted;
     }
 
     @Override

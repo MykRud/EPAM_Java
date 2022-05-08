@@ -88,8 +88,7 @@ public class DirectorDAO extends DAO<Integer, Director> {
     }
 
     public List<Director> findDirectorsByLastName(String name) throws DAOException{
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         List<Director> listOfDirectors = new ArrayList<>();
         PreparedStatement statement = null;
         try {
@@ -101,8 +100,6 @@ public class DirectorDAO extends DAO<Integer, Director> {
             e.printStackTrace();
         } finally {
             close(statement);
-            if(!movieDAO.isConnected())
-                transaction.end(this);
         }
         return listOfDirectors;
     }
@@ -249,8 +246,7 @@ public class DirectorDAO extends DAO<Integer, Director> {
 
     @Override
     public boolean create(Director entity) throws DAOException {
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         PreparedStatement statement = null;
         int updatedRecords = 0;
         try {
@@ -270,7 +266,6 @@ public class DirectorDAO extends DAO<Integer, Director> {
             throw new DAOException(e);
         } finally {
             close(statement);
-            transaction.end(this);
         }
         return updatedRecords > 0;
     }

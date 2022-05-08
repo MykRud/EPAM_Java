@@ -37,7 +37,7 @@ public class Movie extends Entity{
 
     public static void setNumberOfMovies(int nom) {
         numberOfMovies = nom;
-        numberOfMovies++;
+        numberOfMovies += 2;
     }
 
     public void setId(int id) {

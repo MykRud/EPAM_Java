@@ -26,7 +26,10 @@ public class Director extends Entity{
 
     public static void setNumberOfDirectors(int nod) {
         numberOfDirectors = nod;
-        numberOfDirectors++;
+    }
+
+    public static void decreaseNumberOfDirector(){
+        numberOfDirectors--;
     }
 
     public int getId() {

@@ -172,7 +172,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
     @Override
     public Movie findById(Integer id) throws DAOException {
         if(!isConnected)
-            transaction.init(this);
+            transaction.initTransaction(this, actorDAO);
         List<Movie> listOfMovies = new ArrayList<>();
         PreparedStatement statement = null;
         try{
@@ -185,7 +185,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } finally {
             close(statement);
             if(!isConnected)
-                transaction.end(this);
+                transaction.endTransaction();
         }
         if(listOfMovies.isEmpty())
             return null;
@@ -211,8 +211,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
 
     @Override
     public boolean delete(Movie entity) throws DAOException {
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         PreparedStatement statement = null;
         int updatedRecords = 0;
         try {
@@ -242,8 +241,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
 
     @Override
     public boolean delete(Integer id) throws DAOException {
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         PreparedStatement statement = null;
         int updatedRecords = 0;
         try {
@@ -277,8 +275,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
 
     @Override
     public boolean create(Movie entity) throws DAOException {
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         PreparedStatement statement = null;
         int updatedRecords = 0;
         try {
@@ -290,6 +287,8 @@ public class MovieDAO extends DAO<Integer, Movie>{
             statement.setDate(3, entity.getReleaseDate());
             statement.setString(4, entity.getCountry());
             List<Director> director = directorDAO.findDirectorsByLastName(entity.getDirectorName());
+            if(director.isEmpty())
+                throw new DAOException("Спершу слід додати режисера у базу даних");
             statement.setInt(5, director.get(0).getId());
             updatedRecords = statement.executeUpdate();
             statement = connection.prepareStatement(ON_FOREIGN_KEY);
@@ -369,10 +368,11 @@ public class MovieDAO extends DAO<Integer, Movie>{
     }
 
     private static final String SQL_FIND_MOVIES_WITH_INTERVAL_LESS =
-            "SELECT * FROM Movie WHERE release_date>DATE_SUB(NOW(), INTERVAL ? YEAR)";
+            "SELECT movie_id, name, release_date, country, lastname AS director " +
+                    "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.release_date>DATE_SUB(NOW(), INTERVAL ? YEAR)";
     private static final String SQL_FIND_MOVIES_WITH_INTERVAL_GREATER =
-            "SELECT * FROM Movie WHERE release_date<DATE_SUB(NOW(), INTERVAL ? YEAR)";
-
+            "SELECT movie_id, name, release_date, country, lastname AS director " +
+                    "FROM MOVIE mov INNER JOIN DIRECTOR dir ON mov.director_id=dir.director_id WHERE mov.release_date<DATE_SUB(NOW(), INTERVAL ? YEAR)";
 
     // 1: Знайти всі фільми, що вийшли на екран у теперішньому та попередньому роках
     public List<Movie> findThisYearAndPreviousYearMovies() throws DAOException {

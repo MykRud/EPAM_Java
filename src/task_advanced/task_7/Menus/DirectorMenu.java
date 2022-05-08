@@ -42,7 +42,8 @@ public class DirectorMenu implements Menu{
                 "6 - Додати режисера у базу даних",
                 "7 - Змінити режисера",
                 "8 - Видалити режисера",
-                "9 - Вихід",
+                "9 - Назад",
+                "10 - Вихід",
         };
         int option = 0;
         while (option != 9){
@@ -88,12 +89,12 @@ public class DirectorMenu implements Menu{
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 8:
+                    case 7:
                         alterDirector();
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 9:
+                    case 8:
                         System.out.println("Введіть прізвище режисера, якого слід видалити з бази даних: ");
                         String directorName = scanner.nextLine();
                         Director director = directorService.findDirectorsByLastName(directorName).get(0);

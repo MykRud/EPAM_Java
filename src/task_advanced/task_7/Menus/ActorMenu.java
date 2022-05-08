@@ -42,15 +42,15 @@ public class ActorMenu implements Menu{
                 "4 - Вибрати акторів за датою народження",
                 "5 - Вибрати акторів, які знімалися у декому фільмі",
                 "6 - Додати актора у базу даних",
-                "7 - Додати актора у фільм",
-                "8 - Змінити актора",
-                "9 - Видалити актора",
-                "10 - Вивести усю інформацію про актерів, за знімалися як мінімум у N фільмах",
-                "11 - Вивести інформацію про акторів, які бути режисерами хоча би одного із фільмів",
+                "7 - Змінити актора",
+                "8 - Видалити актора",
+                "9 - Вивести усю інформацію про актерів, за знімалися як мінімум у N фільмах",
+                "10 - Вивести інформацію про акторів, які бути режисерами хоча би одного із фільмів",
+                "11 - Назад",
                 "12 - Вихід",
         };
         int option = 0;
-        while (option != 12){
+        while (option != 11){
             printMenu(options);
             try {
                 option = Integer.parseInt(scanner.nextLine());
@@ -93,12 +93,12 @@ public class ActorMenu implements Menu{
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 8:
+                    case 7:
                         alterActor();
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 9:
+                    case 8:
                         System.out.println("Введіть прізвище актора, якого слід видалити з бази даних: ");
                         String actorName = scanner.nextLine();
                         Actor actor = actorService.findActorByLastName(actorName).get(0);
@@ -106,14 +106,14 @@ public class ActorMenu implements Menu{
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 10:
+                    case 9:
                         System.out.println("Введіть кількість фільмів: ");
                         int numberOfMovies = Integer.parseInt(scanner.nextLine());
                         printList(actorService.findActorsThatActAtLeastInNMovies(numberOfMovies));
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();
                         break;
-                    case 11:
+                    case 10:
                         printList(actorService.findActorsThatAreDirectorsInAtLeastOneMovie());
                         System.out.println("Натисніть Enter щоб продовжити...");
                         scanner.nextLine();

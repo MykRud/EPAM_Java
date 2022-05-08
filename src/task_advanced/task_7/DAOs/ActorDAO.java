@@ -92,8 +92,7 @@ public class ActorDAO extends DAO<Integer, Actor> {
 
     // 2: Вивести усю інформацію про актерів, за знімалися у фільмі
     public List<Actor> findActorsByMovie(String movieName) throws DAOException{
-        if(!isConnected)
-            transaction.init(this);
+        transaction.init(this);
         List<Actor> listOfActors = new ArrayList<>();
         PreparedStatement statement = null;
         try {
@@ -105,8 +104,8 @@ public class ActorDAO extends DAO<Integer, Actor> {
             e.printStackTrace();
         } finally {
             close(statement);
-            if(!movieDAO.isConnected())
-                transaction.end(this);
+            //if(!movieDAO.isConnected())
+                //transaction.end(this);
         }
         return listOfActors;
     }
