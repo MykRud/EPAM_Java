@@ -17,6 +17,7 @@ public class ActorService extends AbstractService<Integer, Actor>{
         return actorDAO.findById(id);
     }
 
+    // 2: Вивести усю інформацію про актерів, за знімалися у фільмі
     public List<Actor> findActorsByMovie(String movieName) throws DAOException{
         return actorDAO.findActorsByMovie(movieName);
     }
@@ -47,5 +48,15 @@ public class ActorService extends AbstractService<Integer, Actor>{
     @Override
     public boolean alter(Actor entity) throws DAOException {
         return actorDAO.update(entity);
+    }
+
+    // 3: Вивести усю інформацію про актерів, за знімалися як мінімум у N фільмах
+    public List<Actor> findActorsThatActAtLeastInNMovies(Integer n) throws DAOException {
+        return actorDAO.findActorsThatActAtLeastInNMovies(n);
+    }
+
+    // 4: Вивести інформацію про акторів, які бути режисерами хоча би одного із фільмів
+    public List<Actor> findActorsThatAreDirectorsInAtLeastOneMovie() throws DAOException {
+        return actorDAO.findActorsThatAreDirectorsInAtLeastOneMovie();
     }
 }

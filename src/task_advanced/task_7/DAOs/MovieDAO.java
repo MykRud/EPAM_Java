@@ -162,8 +162,9 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e){
             throw new DAOException(e);
         } finally {
-            transaction.end(this);
             close(statement);
+            if(isConnected)
+                transaction.end(this);
         }
         return listOfMovies;
     }
@@ -182,6 +183,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
+            close(statement);
             if(!isConnected)
                 transaction.end(this);
         }
@@ -386,6 +388,7 @@ public class MovieDAO extends DAO<Integer, Movie>{
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
+            close(statement);
             if(!isConnected)
                 transaction.end(this);
         }

@@ -105,7 +105,7 @@ public class ActorDAO extends DAO<Integer, Actor> {
             e.printStackTrace();
         } finally {
             close(statement);
-            if(movieDAO.isConnected())
+            if(!movieDAO.isConnected())
                 transaction.end(this);
         }
         return listOfActors;

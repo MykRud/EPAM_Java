@@ -61,4 +61,14 @@ public class MovieService extends AbstractService<Integer, Movie>{
             movie.addActor(actor);
         return isAdded;
     }
+
+    // 1: Знайти всі фільми, що вийшли на екран у теперішньому та попередньому роках
+    public List<Movie> findThisYearAndPreviousYearMovies() throws DAOException {
+        return movieDAO.findThisYearAndPreviousYearMovies();
+    }
+
+    // 5: Видалити усі фільми, дата виходу яких є більшою за певну кількісті років
+    public boolean deleteMoviesThatHaveReleaseDateGreaterThanN(int n) throws DAOException {
+        return movieDAO.deleteMoviesThatHaveReleaseDateGreaterThanN(n);
+    }
 }

@@ -1,8 +1,6 @@
 package task_advanced.task_7.DAOs;
 
-import task_advanced.task_7.Entities.Actor;
 import task_advanced.task_7.Entities.Director;
-import task_advanced.task_7.QueryClasses.SelectQueryClass;
 
 import java.sql.*;
 import java.text.ParseException;
