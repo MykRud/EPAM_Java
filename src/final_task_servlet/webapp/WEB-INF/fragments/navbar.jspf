@@ -20,7 +20,7 @@
                         </a></li>
                     </c:if>
                         <c:if test="${sessionScope.authUser != null}">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/pages/signout">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/pages/logout">
                             <fmt:message key="button.logout"/>
                         </a></li>
                     </c:if>

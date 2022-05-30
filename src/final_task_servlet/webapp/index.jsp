@@ -144,7 +144,7 @@
                             </div>
                             <img class="img-fluid" src="${pageContext.request.contextPath}/images/achievement.png" alt="..." />
                             <h1 class="display-6 text-center p-2 retroshd">
-                                <fmt:message key="link.all_activities"/>
+                                <fmt:message key="link.add_activity"/>
                             </h1>
                             </a>
                         </div>

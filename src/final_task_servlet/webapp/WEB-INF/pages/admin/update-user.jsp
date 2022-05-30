@@ -73,7 +73,7 @@
 
                             <!-- Username input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text" name="username_reg"
+                                <input class="form-control" id="name" type="text" name="username"
                                    value="${requestScope.user.username_reg}"
                                    placeholder="<fmt:message key="registration.username.placeholder"/>" data-sb-validations="required" />
                                 <label for="name"><fmt:message key="registration.username.label"/></label>
@@ -83,7 +83,7 @@
                             </div>
                             <!-- Password input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="password" name="password_reg"
+                                <input class="form-control" id="name" type="password" name="password"
                                    value="${requestScope.user.password_reg}"
                                    placeholder="<fmt:message key="registration.password.placeholder"/>" data-sb-validations="required" />
                                 <label for="name"><fmt:message key="registration.password.label"/></label>
