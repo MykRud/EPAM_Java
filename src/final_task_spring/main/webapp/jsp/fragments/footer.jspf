@@ -1,0 +1,32 @@
+<!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <c:if test="${sessionScope.authUser != null}">
+        <p>
+    <span>
+      <fmt:message key="footer.logged_user"/>
+    </span>
+            <span class="mr-4">
+                    ${sessionScope.authUser.getUsername()}
+            </span>
+            <span>
+      <fmt:message key="footer.roles"/>
+    </span>
+            <span class="mr-4">
+                    ${sessionScope.authUser.getAuthorities()}
+            </span>
+        </p>
+    </c:if>
+    <span style="float: right">
+        <a href="?lang=en">
+            <fmt:message key="lang.en"/>
+        </a>
+        |
+        <a href="?lang=ua">
+            <fmt:message key="lang.ua"/>
+        </a>
+    </span>
+                </div>
+            </div>
+        </footer>

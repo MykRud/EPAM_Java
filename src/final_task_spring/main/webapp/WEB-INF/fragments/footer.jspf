@@ -1,0 +1,38 @@
+<!-- Footer-->
+<footer class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <c:if test="${pageContext.request.userPrincipal.authenticated}">
+                <p>
+                    <span>
+                        <spring:message code="footer.logged_user"/> 
+                    </span>
+                    <span class="mr-4">
+                        ${pageContext.request.userPrincipal.name}
+                    </span>
+                    <br>
+                    <span>
+                        <spring:message code="footer.roles"/> 
+                    </span>
+                    <span class="mr-4">
+                        <timeManage:authorityCheck auth="USER" user_id="Me">
+                                USER
+                        </timeManage:authorityCheck>
+                        <timeManage:authorityCheck auth="ADMIN" user_id="Me">
+                                | ADMIN
+                        </timeManage:authorityCheck>
+                    </span>
+                </p>
+            </c:if>
+            <span style="float: right">
+                <a href="?lang=en">
+                    <spring:message code="lang.en"/> 
+                </a>
+                |
+                <a href="?lang=ua">
+                    <spring:message code="lang.ua"/> 
+                </a>
+            </span>
+        </div>
+    </div>
+</footer>
